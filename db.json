@@ -1,52 +1,41 @@
 {
-
-  "teams": 
-  [
-    { "id":1,
-      "teamname":"ver01" 
+  "teams": [
+    {
+      "id": 1,
+      "teamname": "ver01"
     }
   ],
-
-
   "users": [
     {
       "id": 1,
       "username": "akira",
-      "teamId" : 1
+      "teamId": 1,
+      "hashedPassword": "$2a$10$BfwnSMEzvBvjUeWU6WvnR.BTnyoXcmSUZA9u1T3/xqxz6NIXrJ9/G"
     }
   ],
-
-
-
-
-  "projects": 
-  [
+  "projects": [
     {
       "id": 1,
       "userId": 1,
       "title": "PJT 01",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     },
     {
       "id": 2,
       "userId": 1,
       "title": "PJT 02",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     }
   ],
-
-
-
-  "tasks": 
-  [
+  "tasks": [
     {
       "id": 1,
       "userId": 1,
@@ -54,10 +43,10 @@
       "title": "task 1",
       "body": "body 011",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     },
     {
       "id": 2,
@@ -66,10 +55,10 @@
       "title": "task 2",
       "body": "body 012",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     },
     {
       "id": 3,
@@ -78,10 +67,10 @@
       "title": "task 3",
       "body": "body 021",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     },
     {
       "id": 4,
@@ -90,17 +79,13 @@
       "title": "task 4",
       "body": "body 022",
       "orgDate": 0,
-      "update" : 0,
-      "startDate" : 0,
-      "dueDate" : 0,
-      "complete" : 0
+      "update": 0,
+      "startDate": 0,
+      "dueDate": 0,
+      "complete": 0
     }
   ],
-
-
-
-  "comments": 
-  [
+  "comments": [
     {
       "id": 1,
       "userId": 1,
@@ -130,10 +115,7 @@
       "orgDate": 0
     }
   ],
-
-  
-  "labels": 
-  [
+  "labels": [
     {
       "id": 1,
       "userId": 1,
@@ -159,9 +141,4 @@
       "title": "label 4"
     }
   ]
-
-
-
-
-
 }

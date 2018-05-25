@@ -5,10 +5,236 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>중간 프로젝트 템플릿</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" integrity="sha256-zIG416V1ynj3Wgju/scU80KAEWOsO5rRLfVyRDuOv7Q=" crossorigin="anonymous" />
   <link rel="stylesheet" href="./index.scss">
 </head>
 <body>
-  <h1>중간 프로젝트 템플릿</h1>
+
+
+
+  <!-- ========================login page========================= -->
+  <!-- ========================login page========================= -->
+  <!-- ========================login page========================= -->
+
+<template class="" id="login">
+  <h1 class="login__title">birello</h1>
+  <form class="login__form">
+    <input type="text" class="login__input-id" placeholder="ID">
+    <input type="text" class="login__input-pw" placeholder="Password">
+    <button class="login__login__submit-btn button">Log in</button>
+  </form>
+</template>
+
+
+  <!-- ========================index page========================= -->
+  <!-- ========================index page========================= -->
+  <!-- ========================index page========================= -->  
+
+
+  <!-- ========================== header ========================= -->  
+  <!-- ========================== header ========================= -->
+
+<template class="header">
+  <h1 class="header__title">birello</h1>
+  <div class="header__newCardbox-btn button">New project</div>
+  <div class="header__logout-btn button">Log out</div>
+</template>
+
+
+
+<template class="newCardbox">
+  <div class="newCardbox__title">Input Title</div>
+<form class="newCardbox__form">
+  <input type="text" class="newCardbox__title-input" placeholder="title">
+  <button class="newCardbox__submit-btn"></button>
+</form>
+</template>
+
+
+
+  <!-- ========================== content ========================= -->  
+  <!-- ========================== content ========================= -->
+
+
+
+
+<template class="content">
+<div class="content__header">
+  <div class="content__header-anchor"></div>
+</div>
+<div class="content__body">
+<div class="content__body-anchor"></div>
+</div>
+</template>
+
+
+
+<template class="cardbox">
+<h3 class="cardbox__title"></h3>
+<div class="cardbox__update"></div> <!-- only this will sort by update -->
+<div class="cardbox__anchor"></div>
+</template>
+
+
+<template class="task-index">
+  <p class="task-index__title"></p>
+</template>
+
+
+  <!-- ========================== project ========================= -->  
+  <!-- ========================== project ========================= -->
+
+
+
+<template class="project">
+<div class="project__header">
+<div class="project__title"></div>
+<button class="project__newTask button">New Task</button>
+<button class="project__goBack button">Back to Index</button>
+</div>
+<div class="project__content-grid"> <!-- use grid(2 column, task and comment, 1fr 1fr) -->
+  <div class="project__anchor-task"></div> <!-- css, overflow, scroll -->
+  <div class="project__anchor-comment"></div> <!-- css, overflow, scroll -->
+</div>
+</template>
+
+
+<template class="task-project">
+  <div class="task-project__content">
+    <p class="task-project__title"></p>
+    <p class="task-project__body"></p>
+    <span class="task-project__username"></span>
+    <span class="task-project__update"></span>
+  </div>
+
+  <div class="task-project__option-btn button dropdown is-hoverable"> <!-- use imoticon, hoveralbe(dropdown) -->
+      <div class="dropdown-trigger">
+        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+          <span> + </span>
+          <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+        <div class="dropdown-content">
+          <div class="dropdown-item">
+            <div class="task-project__option-btn-edit button">edit</div>
+            <div class="task-project__option-btn-complete button">complete</div>
+            <div class="task-project__option-btn-delete button">delete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</template>
+
+
+<template class="comment">
+  <form class="comment__from">
+    <input type="text" class="comment__input" placeholder="comment">
+    <button class="comment__submit-btn">submit</button>
+  </form>
+  <div class="comment__anchor"></div>
+</template>
+
+
+<template class="comment-list">
+  <p class="comment-list__content"></p>
+  <span class="comment-list__username"></span>
+  <span class="comment-list__originDate"></span>
+</template>
+
+
+  <!-- ============================= task edit-modal ========================= -->  
+  <!-- ============================= task edit-modal ========================= -->
+
+
+<template class="edit-modal">
+<form class="edit-modal__form">
+  
+  <div class="edit-modal__info">
+    <span class="edit-modal__username"></span>
+    <span class="edit-modal__update"></span>
+  </div>
+
+
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">Title</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <input class="edit-modal__title-input input is-danger" type="text" placeholder="title">
+            </div>
+            <p class="help is-danger">
+              This field is required
+            </p>
+          </div>
+        </div>
+      </div>
+      
+
+
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">Body</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <textarea class="edit-modal__body-input textarea" placeholder="body"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      
+      <div class="field is-horizontal">
+        <div class="field-label">
+          <!-- Left empty for spacing -->
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <button class="edit-modal__submit-btn button is-primary">
+                edit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+</form>
+</template>
+
+
+  <!-- ============================= footer ============================ -->  
+  <!-- ============================= footer ============================ -->
+
+<template class="footer">
+<h4 class="designer">Akira A</h4>
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script src="./index.js"></script>
 </body>
 </html>
+
