@@ -5,22 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>중간 프로젝트 템플릿</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" integrity="sha256-zIG416V1ynj3Wgju/scU80KAEWOsO5rRLfVyRDuOv7Q=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
   <link rel="stylesheet" href="./index.scss">
 </head>
 <body>
 
+  <div class="anchor"></div>
+
 
 
   <!-- ========================login page========================= -->
   <!-- ========================login page========================= -->
   <!-- ========================login page========================= -->
 
-<template class="" id="login">
+<template id="login">
   <h1 class="login__title">birello</h1>
   <form class="login__form">
-    <input type="text" class="login__input-id" placeholder="ID">
-    <input type="text" class="login__input-pw" placeholder="Password">
+    <input name="id" type="text" class="login__input-id" placeholder="ID">
+    <input name="pw" type="text" class="login__input-pw" placeholder="Password">
     <button class="login__login__submit-btn button">Log in</button>
   </form>
 </template>
@@ -34,7 +36,7 @@
   <!-- ========================== header ========================= -->  
   <!-- ========================== header ========================= -->
 
-<template class="header">
+<template id="header">
   <h1 class="header__title">birello</h1>
   <div class="header__newCardbox-btn button">New project</div>
   <div class="header__logout-btn button">Log out</div>
@@ -42,11 +44,11 @@
 
 
 
-<template class="newCardbox">
-  <div class="newCardbox__title">Input Title</div>
-<form class="newCardbox__form">
-  <input type="text" class="newCardbox__title-input" placeholder="title">
-  <button class="newCardbox__submit-btn"></button>
+<template id="newCardbox-modal">
+  <div class="newCardbox-modal__title">Input Title</div>
+<form class="newCardbox-modal__form">
+  <input type="text" class="newCardbox-modal__title-input" placeholder="title">
+  <button class="newCardbox-modal__submit-btn"></button>
 </form>
 </template>
 
@@ -58,7 +60,7 @@
 
 
 
-<template class="content">
+<template id="content">
 <div class="content__header">
   <div class="content__header-anchor"></div>
 </div>
@@ -69,24 +71,25 @@
 
 
 
-<template class="cardbox">
+<template id="cardbox">
 <h3 class="cardbox__title"></h3>
 <div class="cardbox__update"></div> <!-- only this will sort by update -->
 <div class="cardbox__anchor"></div>
 </template>
 
 
-<template class="task-index">
+<template id="task-index">
   <p class="task-index__title"></p>
 </template>
 
 
-  <!-- ========================== project ========================= -->  
-  <!-- ========================== project ========================= -->
+  <!-- ========================== project page ========================= -->  
+  <!-- ========================== project page ========================= -->
+  <!-- ========================== project page ========================= -->
 
 
 
-<template class="project">
+<template id="project">
 <div class="project__header">
 <div class="project__title"></div>
 <button class="project__newTask button">New Task</button>
@@ -99,7 +102,7 @@
 </template>
 
 
-<template class="task-project">
+<template id="task-project">
   <div class="task-project__content">
     <p class="task-project__title"></p>
     <p class="task-project__body"></p>
@@ -130,7 +133,7 @@
 </template>
 
 
-<template class="comment">
+<template id="comment">
   <form class="comment__from">
     <input type="text" class="comment__input" placeholder="comment">
     <button class="comment__submit-btn">submit</button>
@@ -139,7 +142,7 @@
 </template>
 
 
-<template class="comment-list">
+<template id="comment-list">
   <p class="comment-list__content"></p>
   <span class="comment-list__username"></span>
   <span class="comment-list__originDate"></span>
@@ -147,10 +150,10 @@
 
 
   <!-- ============================= task edit-modal ========================= -->  
-  <!-- ============================= task edit-modal ========================= -->
 
 
-<template class="edit-modal">
+
+<template id="edit-modal">
 <form class="edit-modal__form">
   
   <div class="edit-modal__info">
@@ -217,7 +220,7 @@
   <!-- ============================= footer ============================ -->  
   <!-- ============================= footer ============================ -->
 
-<template class="footer">
+<template id="footer">
 <h4 class="designer">Akira A</h4>
 </template>
 
