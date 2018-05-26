@@ -58,7 +58,7 @@
       "update": 0,
       "startDate": 0,
       "dueDate": 0,
-      "complete": 0
+      "complete": 1
     },
     {
       "id": 4,
@@ -101,6 +101,24 @@
       "body": "123",
       "orgDate": 0,
       "id": 5
+    },
+    {
+      "userId": 1,
+      "taskId": 1,
+      "body": "1234",
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "taskId": 2,
+      "body": "444",
+      "id": 7
+    },
+    {
+      "userId": 1,
+      "taskId": 4,
+      "body": "556",
+      "id": 8
     }
   ],
   "labels": [

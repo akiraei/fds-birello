@@ -75,14 +75,13 @@
   <div class="header__newCardbox-btn button">New project</div>
   <div class="header__logout-btn button">Log out</div>
 
-
-  <!-- <template id="newCardbox-modal">
-    <div class="newCardbox-modal__title">Input Title</div>
-    <form class="newCardbox-modal__form">
-      <input type="text" class="newCardbox-modal__title-input" placeholder="title">
-      <button class="newCardbox-modal__submit-btn"></button>
-    </form>
-  </template> -->
+  <div class="header__newCardbox modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        just
+      </div>
+      <button class="header__newCardbox-close-btn modal-close is-large" aria-label="close"></button>
+    </div>
 
 
 
@@ -120,9 +119,11 @@
 
 
 <template id="cardbox">
-  <h3 class="cardbox__title"></h3>
-  <div class="cardbox__update"></div> <!-- only this will sort by update -->
-<div class="cardbox__anchor"></div>
+  <div class="cardbox__container">
+    <h3 class="cardbox__title"></h3>
+    <div class="cardbox__update"></div> <!-- only this will sort by update -->
+    <div class="cardbox__anchor"></div>
+  </div>
 </template>
 
 
@@ -194,8 +195,10 @@
   <!-- ===========project edit-modal ============= -->
     
     
-    <div class="projectPage-edit-modal__container modal covering">
+    <div class="projectPage-edit-modal__container modal ">
 
+        <div class="modal-background"></div>
+        <div class="modal-content">
       
       <form class="edit-modal__form decover">
 
@@ -203,7 +206,6 @@
         <div class="edit-modal__info">
           <span class="edit-modal__username">akira</span>
           <span class="edit-modal__update">last update: 2018</span>
-          <button class="edit-modal__delete delete"></button>
         </div>
         
         
@@ -257,8 +259,11 @@
                     
             
           </form>
-          
+
         </div>
+        <button class="modal-close edit-modal__delete is-large" aria-label="close"></button>
+
+        </div> 
           
 
           
@@ -356,24 +361,35 @@
 </template> -->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!-- ============================= footer ============================ -->  
   <!-- ============================= footer ============================ -->
 
 <template id="footer">
 <h4 class="designer">Akira A</h4>
 </template>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   <script src="./index.js"></script>
