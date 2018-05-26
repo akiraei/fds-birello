@@ -10,7 +10,26 @@
 </head>
 <body>
 
-  <div class="anchor"></div>
+  <div class="login">
+    <div class="anchor login__anchor"></div>
+  </div>
+
+  <div class="index">
+    <div class="anchor index__anchor-header"></div>
+    <div class="anchor index__anchor-content"></div>
+    <div class="anchor index__anchor-footer"></div>
+  </div>
+
+  <div class="project">
+    <div class="anchor project__anchor-header"></div>
+    <div class="project__container">
+      <div class="anchor project__anchor-task"></div>
+      <div class="anchor project__anchor-comment"></div>
+    </div>
+    <div class="anchor project__anchor-footer"></div>
+  </div>
+
+
 
 
 
@@ -45,9 +64,6 @@
   <!-- ========================index page========================= -->
   <!-- ========================index page========================= -->  
 
-  <template id="indexpage">
-    <div class="indexpage__anchor"></div>
-  </template>
 
 
 
@@ -58,16 +74,21 @@
   <h1 class="header__title">birello</h1>
   <div class="header__newCardbox-btn button">New project</div>
   <div class="header__logout-btn button">Log out</div>
+
+
+  <!-- <template id="newCardbox-modal">
+    <div class="newCardbox-modal__title">Input Title</div>
+    <form class="newCardbox-modal__form">
+      <input type="text" class="newCardbox-modal__title-input" placeholder="title">
+      <button class="newCardbox-modal__submit-btn"></button>
+    </form>
+  </template> -->
+
+
+
 </template>
 
 
-<template id="newCardbox-modal">
-  <div class="newCardbox-modal__title">Input Title</div>
-  <form class="newCardbox-modal__form">
-    <input type="text" class="newCardbox-modal__title-input" placeholder="title">
-    <button class="newCardbox-modal__submit-btn"></button>
-  </form>
-</template>
 
 
 
@@ -98,8 +119,6 @@
 </template>
 
 
-
-
 <template id="cardbox">
   <h3 class="cardbox__title"></h3>
   <div class="cardbox__update"></div> <!-- only this will sort by update -->
@@ -116,28 +135,27 @@
   <!-- ========================== project page ========================= -->
   <!-- ========================== project page ========================= -->
 
-  <template id="projectpage">
-      <div class="projectpage__anchor-header"></div>
-      <div class="projectpage__body">
-        <div class="projectpage__anchor-task"></div>
-        <div class="projectpage__anchor-comment">
-
-            <form class="comment__from">
-                <input type="text" class="comment__input" placeholder="comment">
-                <button class="comment__submit-btn">submit</button>
-              </form>
-
-        </div>
-      </div>
-  </template>
-
   
+
+
+  <!-- ===========project header============= -->
+  <!-- ===========project header============= -->
+
+
 <template id="project__header">
 <div class="project__title"></div>
 <div class="project__duedate"></div>
 <button class="project__newTask button">New Task</button>
 <button class="project__goBack button">Back to Index</button>
 </template>
+
+
+  <!-- ===========project content============= -->
+  <!-- ===========project content============= -->
+
+
+
+  <!-- ===========project task============= -->
 
 
 <template id="task-project"> <!-- css, overflow, scroll -->
@@ -172,16 +190,20 @@
     </div>
 
   </div>
+
+  <!-- ===========project edit-modal ============= -->
     
     
-    <div class="projectPage-edit-modal__container modal ">
+    <div class="projectPage-edit-modal__container modal covering">
 
       
-      <form class="edit-modal__form">
+      <form class="edit-modal__form decover">
+
         
         <div class="edit-modal__info">
           <span class="edit-modal__username">akira</span>
           <span class="edit-modal__update">last update: 2018</span>
+          <button class="edit-modal__delete delete"></button>
         </div>
         
         
@@ -238,17 +260,32 @@
           
         </div>
           
-          
-          
+
           
         </template>
         
+        
+
+
+   <!-- =========== project comment ============= -->
         
         <template id="comment"> <!-- css, overflow, scroll -->
-          <p class="comment__content"></p>
-          <span class="comment__username"></span>
-          <span class="comment__originDate"></span>
+
+          <form class="comment__form">
+              <input name="body" type="text" class="comment__input" placeholder="comment">
+              <button class="comment__submit-btn">submit</button>
+            </form>
+          </template>
+
+        <template id="comment-content">
+           <p class="comment-content__body"></p>
+          <span class="comment-content__username"></span>
+          <span class="comment-content__originDate"></span>
         </template>
+
+
+
+
         
 
   <!-- ============================= task edit-modal ========================= -->  

@@ -1,9 +1,17 @@
-$main-color: skyblue;
+$main-color: ivory;
 
 body {
   background-color: $main-color;
 }
 
 .hidden {
-  display: none
+  display: none;
+}
+
+.covering {
+  background-color: #101010
+}
+
+.decover {
+  background-color: white
 }

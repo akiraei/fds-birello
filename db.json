@@ -61,18 +61,6 @@
       "complete": 0
     },
     {
-      "id": 3,
-      "userId": 1,
-      "projectId": 2,
-      "title": "task 3",
-      "body": "body 021",
-      "orgDate": 0,
-      "update": 0,
-      "startDate": 0,
-      "dueDate": 0,
-      "complete": 0
-    },
-    {
       "id": 4,
       "userId": 1,
       "projectId": 2,
@@ -101,18 +89,18 @@
       "orgDate": 0
     },
     {
-      "id": 3,
-      "userId": 1,
-      "taskId": 3,
-      "body": "comment 3",
-      "orgDate": 0
-    },
-    {
       "id": 4,
       "userId": 1,
       "taskId": 4,
       "body": "comment 4",
       "orgDate": 0
+    },
+    {
+      "userId": 1,
+      "taskId": 4,
+      "body": "123",
+      "orgDate": 0,
+      "id": 5
     }
   ],
   "labels": [
@@ -127,12 +115,6 @@
       "userId": 1,
       "taskId": 2,
       "title": "label 2"
-    },
-    {
-      "id": 3,
-      "userId": 1,
-      "taskId": 3,
-      "title": "label 3"
     },
     {
       "id": 4,
