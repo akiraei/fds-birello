@@ -15,3 +15,50 @@ body {
 .decover {
   background-color: white
 }
+
+.content__body-anchor {
+  display: flex;
+}
+
+.cardbox__container {
+  margin: 10px;
+  border-color: black;
+  padding: 5px;
+}
+
+.content__header-anchor {
+  background-color: antiquewhite;
+}
+
+.label__content {
+  margin: 10px;
+}
+
+
+.project__container {
+  display: flex;
+}
+
+.project__anchor-task{
+  overflow: scroll;
+  background-color: darkkhaki;
+}
+
+.task-project__content {
+  display: flex;
+  width: 300px;
+  margin: 15px;
+  background-color: white;
+}
+
+.project__anchor-comment {
+  overflow: scroll;
+  width: 500px;
+  background-color: gainsboro;
+}
+
+.comment-content__container {
+  margin: 10px;
+  background-color: white;
+}
+

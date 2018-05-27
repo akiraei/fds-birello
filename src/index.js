@@ -66,6 +66,19 @@ function sortOrgDate (arr) {
 
 
 
+function completation (task, fragment) {
+  if (task.complete === 1) {
+
+    fragment.querySelector(".task-project__content-container").classList.add('covering')
+    
+    fragment.querySelector(".task-project__option-btn").classList.add('hidden')
+    
+    fragment.querySelector(".task-project__delete-btn").classList.remove('hidden')
+  }
+}
+
+
+
 
 function swipe() {
   
@@ -139,7 +152,7 @@ async function indexPage() {
 
         //logOut Btn, New Project setting needed
 
-        const newCardboxModal = headerFrag.querySelector(".header__newCardbox")
+        const newCardboxModal = headerFrag.querySelector(".newCardbox-modal")
 
         headerFrag.querySelector(".header__newCardbox-btn").addEventListener("click", e => {
           e.preventDefault()
@@ -151,6 +164,23 @@ async function indexPage() {
           newCardboxModal.classList.remove("is-active")
         })
 
+
+        const newCardboxModalTitle = headerFrag.querySelector(".newCardbox-modal__title-input")
+        const newCardboxModalBegin = headerFrag.querySelector(".newCardbox-modal__startDate-input")
+        const newcardboxModalDue = headerFrag.querySelector(".newCardbox-modal__dueDate-input")
+        const newcardboxSubmitBtn = headerFrag.querySelector(".newCardbox-modal__submit-btn")
+
+        newcardboxSubmitBtn.addEventListener('click', async e=> {
+          e.preventDefault()
+          const res = await postAPI.post('./projects', {
+            title : newCardboxModalTitle.value,
+            startDate : newCardboxModalBegin.value,
+            dueDate : newcardboxModalDue.value,
+            orgDate : 1,
+            update : 1
+          })
+          indexPage()
+        })
 
 
   render(anchor.indexHeader, headerFrag)
@@ -207,6 +237,7 @@ async function indexPage() {
 
     cardboxFrag.querySelector(".cardbox__container").addEventListener("click", e => {
       e.preventDefault()
+      recentTask = 0;
       projectPage(cardboxId)
     })
  
@@ -215,19 +246,59 @@ async function indexPage() {
     
     cardboxFrag.querySelector(".cardbox__title").textContent = cardbox.title 
     cardboxFrag.querySelector(".cardbox__update").textContent = "updata " + cardbox.update
-    
-    sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
-      
-      const taskIndexFrag = document.importNode(templates.taskIndex, true)
-      
-      // console.log("log5", taskIndex)
 
-      if(taskIndex.projectId === cardbox.id) {
-        taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
+
+
+
+
+    if (sortOrgDate(resTaskIndex.data).lenght < 3){
+
+      sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
+      
+        const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        
+        // console.log("log5", taskIndex)
+  
+        if(taskIndex.projectId === cardbox.id) {
+          taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
+          cardboxAnchor.appendChild(taskIndexFrag)
+        }
+      })
+
+    } else {
+      for (let i = 0; i < 3; i++) {
+
+        const taskIndexFrag = document.importNode(templates.taskIndex, true)
+
+      if(sortOrgDate(resTaskIndex.data)[i].projectId === cardbox.id) {
+        taskIndexFrag.querySelector(".task-index__title").textContent = sortOrgDate(resTaskIndex.data)[i].title
         cardboxAnchor.appendChild(taskIndexFrag)
       }
-    })
+
+      }
+    }
+    
+
+
+
+    // sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
+      
+    //   const taskIndexFrag = document.importNode(templates.taskIndex, true)
+      
+    //   // console.log("log5", taskIndex)
+
+    //   if(taskIndex.projectId === cardbox.id) {
+    //     taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
+    //     cardboxAnchor.appendChild(taskIndexFrag)
+    //   }
+    // })
  
+
+
+
+
+
+
     contentBodyAnchor.appendChild(cardboxFrag)
    
   })
@@ -263,8 +334,14 @@ async function projectPage(num) {
   console.log("resproject", resProject.data)
 
   const projectheaderFrag = document.importNode(templates.projectheader, true)
+  const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
+
+
   
-  // projectheaderFrag.querySelector(".project__newTask").addEventListener("click", e => {})
+  projectheaderFrag.querySelector(".project__newTask").addEventListener("click", e => {
+    e.preventDefault()
+    newTaskModal.classList.add("is-active")
+  })
 
   projectheaderFrag.querySelector(".project__goBack").addEventListener("click", e => {
     e.preventDefault()
@@ -274,8 +351,42 @@ async function projectPage(num) {
 
   projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + resProject.data.dueDate
 
-  anchor.projectHeader.appendChild(projectheaderFrag)
   
+  //----new modaled---
+  
+  
+  const newTaskTitle = projectheaderFrag.querySelector('.newTask-modal__title-input')
+  const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
+  const newTaskDue = projectheaderFrag.querySelector('.newTask-modal__dueDate-input')
+  const newTaskbody = projectheaderFrag.querySelector('.newTask-modal__body-input')
+  const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
+  const newTaskCloseBtn = projectheaderFrag.querySelector('.newTask-modal__close-btn') 
+
+  
+  
+  newTaskSubmitBtn.addEventListener("click", async e => {
+    e.preventDefault()
+    const res = await postAPI.post('./tasks', {
+      projectId : num,
+      title : newTaskTitle.value,
+      body : newTaskbody.value,
+      orgDate : 1,
+      update : 1,
+      startDate : newTaskBegin,
+      dueDate : newTaskDue.value,
+      complete : 0,
+      userId : userid
+    })
+    recentTask = 0;
+    projectPage(num)
+  })
+  
+  newTaskCloseBtn.addEventListener("click", e => {
+    e.preventDefault()
+    newTaskModal.classList.remove("is-active")
+    })
+    
+    anchor.projectHeader.appendChild(projectheaderFrag) //append project header!!!
   
   
   //------------------project task --------------------------
@@ -306,6 +417,9 @@ async function projectPage(num) {
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
         taskProjectFrag.querySelector(".task-project__username").textContent = task.user.username
         taskProjectFrag.querySelector(".task-project__update").textContent = task.update
+
+
+        //------------- op Btn func --------------
         
         const container = taskProjectFrag.querySelector(".task-project__content-container")
         const containerDelete = taskProjectFrag.querySelector(".task-project__delete-btn")
@@ -339,25 +453,80 @@ async function projectPage(num) {
           const res = await postAPI.delete(`./tasks/${task.id}`)
           projectPage(num)
         })
+
+        containerDelete.addEventListener("click", async e => {
+          e.preventDefault();
+          const res = await postAPI.delete(`./tasks/${task.id}`)
+          projectPage(num)
+        })
+
+
+
         
-        
-        //-------------modal---------------------------
+        //-------------edit modaled-------------------
+
+
+
+        const updateModal = taskProjectFrag.querySelector(".edit-modal__update")
+        const titleModal = taskProjectFrag.querySelector(".edit-modal__title-input")
+        const bodyModal = taskProjectFrag.querySelector(".edit-modal__body-input")
         
         
         taskProjectFrag.querySelector(".edit-modal__username").textContent = task.user.username
         
-        taskProjectFrag.querySelector(".edit-modal__update").textContent = task.update
+        updateModal.textContent = "update" + task.update
         
-        taskProjectFrag.querySelector(".edit-modal__title-input").value = task.title
+        titleModal.value = task.title
         
-        taskProjectFrag.querySelector(".edit-modal__body-input").value = task.body
+        bodyModal.value = task.body
         
         taskProjectFrag.querySelector(".edit-modal__delete").addEventListener("click", e=> {
           e.preventDefault();
           editModal.classList.remove("is-active")
-
-
         })
+
+
+        taskProjectFrag.querySelector('.edit-modal__submit-btn').addEventListener("click", async e=> {
+          e.preventDefault();
+
+          const res = await postAPI.patch(`./tasks/${task.id}`,
+          { title: titleModal.value,
+          body : bodyModal.value,
+          update : task.update + 1        
+          })
+
+          editModal.classList.remove("is-active")
+        
+          projectPage(num)
+        })
+
+
+       
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+        completation (task, taskProjectFrag)
         render(anchor.projectTask, taskProjectFrag)
       }
     })
@@ -368,9 +537,6 @@ async function projectPage(num) {
   //---project comment input
   const commentFrag = document.importNode(templates.comment, true)
 
-  console.log("comment input id", userid)
-  console.log("comment input task", recentTask)
-
   commentFrag.querySelector(".comment__form").addEventListener("submit", async e=> {
 
     e.preventDefault()
@@ -378,7 +544,8 @@ async function projectPage(num) {
     const res = await postAPI.post("./comments", {
       userId : userid,
       taskId : recentTask,
-      body : e.target.elements.body.value
+      body : e.target.elements.body.value,
+      orgDate : 10
     })
     projectPage(num)
   })
@@ -397,7 +564,7 @@ async function projectPage(num) {
 
      commentContentFrag.querySelector(".comment-content__body").textContent = comment.body
      commentContentFrag.querySelector(".comment-content__username").textContent = comment.user.username
-     commentContentFrag.querySelector(".comment-content__originDate").textContent = comment.orgDate
+     commentContentFrag.querySelector(".comment-content__originDate").textContent = "date" + comment.orgDate
 
      console.log(commentFrag.content)
 

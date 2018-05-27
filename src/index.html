@@ -75,10 +75,79 @@
   <div class="header__newCardbox-btn button">New project</div>
   <div class="header__logout-btn button">Log out</div>
 
-  <div class="header__newCardbox modal">
+  <div class="newCardbox-modal modal">
       <div class="modal-background"></div>
       <div class="modal-content">
-        just
+
+          <form class="newCardbox-modal__form  decover">       
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Title</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="newCardbox-modal__title-input input is-danger" type="text" placeholder="title">
+                    </div>
+                    <p class="help is-danger">
+                      This field is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Begin</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input class="newCardbox-modal__startDate-input input is-danger" type="date" placeholder="title">
+                      </div>
+                      <p class="help is-danger">
+                        This field is required
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Due</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input class="newCardbox-modal__dueDate-input input is-danger" type="date" placeholder="title">
+                        </div>
+                        <p class="help is-danger">
+                          This field is required
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+      
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <button class="newCardbox-modal__submit-btn button is-primary">
+                            create
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                          
+                  
+                </form>
+
+
+        
       </div>
       <button class="header__newCardbox-close-btn modal-close is-large" aria-label="close"></button>
     </div>
@@ -148,6 +217,103 @@
 <div class="project__duedate"></div>
 <button class="project__newTask button">New Task</button>
 <button class="project__goBack button">Back to Index</button>
+
+
+ <!-- project new modal  -->
+ <div class="newTask-modal modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+
+        <form class="newTask-modal__form  decover">       
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Title</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="newTask-modal__title-input input is-danger" type="text" placeholder="title">
+                  </div>
+                  <p class="help is-danger">
+                    This field is required
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Begin</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="newTask-modal__startDate-input input is-danger" type="date" placeholder="title">
+                    </div>
+                    <p class="help is-danger">
+                      This field is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Due</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input class="newTask-modal__dueDate-input input is-danger" type="date" placeholder="title">
+                      </div>
+                      <p class="help is-danger">
+                        This field is required
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Body</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                              <textarea class="newTask-modal__body-input textarea" placeholder="body"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                <div class="field is-horizontal">
+                  <div class="field-label">
+    
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <button class="newTask-modal__submit-btn button is-primary">
+                          create
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                        
+                
+              </form>
+
+
+      
+    </div>
+    <button class="newTask-modal__close-btn modal-close is-large" aria-label="close"></button>
+  </div>
+
+
+
 </template>
 
 
@@ -160,7 +326,14 @@
 
 
 <template id="task-project"> <!-- css, overflow, scroll -->
+  
+
+
+
+<!-- project task  -->
   <div class="task-project__content">
+
+
     <div class="task-project__content-container">
       <p class="task-project__title"></p>
       <p class="task-project__body"></p>
@@ -170,7 +343,7 @@
 
     <div class="task-project__delete-btn button hidden">delete</div>
     
-    <div class="task-project__option-btn button dropdown is-hoverable"> <!-- use imoticon, hoveralbe(dropdown) -->
+    <div class="task-project__option-btn dropdown is-hoverable"> <!-- use imoticon, hoveralbe(dropdown) -->
       <div class="dropdown-trigger">
         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
           <span> + </span>
@@ -192,7 +365,7 @@
 
   </div>
 
-  <!-- ===========project edit-modal ============= -->
+  <!-- project edit-modal  -->
     
     
     <div class="projectPage-edit-modal__container modal ">
@@ -264,7 +437,13 @@
         <button class="modal-close edit-modal__delete is-large" aria-label="close"></button>
 
         </div> 
+
+
+
+
+       
           
+
 
           
         </template>
@@ -283,9 +462,11 @@
           </template>
 
         <template id="comment-content">
-           <p class="comment-content__body"></p>
-          <span class="comment-content__username"></span>
-          <span class="comment-content__originDate"></span>
+          <div class="comment-content__container">
+            <p class="comment-content__body"></p>
+            <span class="comment-content__username"></span>
+            <span class="comment-content__originDate"></span>
+          </div>
         </template>
 
 
