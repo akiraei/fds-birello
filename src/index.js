@@ -59,15 +59,30 @@ function sortDate (arr) {
 
 function sortOrgDate (arr) {
   let value =  arr.sort( function (a,b) {
-
     let k = moment(b.orgDate).format('x') - moment(a.orgDate).format('x')
     return k
   })
   return value
 }
 
+function sortComplete (arr) {
+  let value =  arr.sort( function (a,b) {
+    let k = a.complete - b.complete
+    return k
+  })
+  return value
+}
 
-function completation (task, fragment) {
+function sortLateTask (arr) {
+  let value =  arr.sort( function (a,b) {
+    let k = b.id - a.id
+    return k
+  })
+  return value
+}
+
+
+function completationProject (task, fragment) {
   if (task.complete === 1) {
 
     fragment.querySelector(".task-project__content-container").classList.add('covering')
@@ -77,6 +92,20 @@ function completation (task, fragment) {
     fragment.querySelector(".task-project__delete-btn").classList.remove('hidden')
   }
 }
+
+function completationIndex (task, fragment) {
+  if (task.complete === 1) {
+
+    fragment.querySelector(".cardbox__container").classList.add('covering')
+    
+    fragment.querySelector(".cardbox__btn-edit").classList.add('hidden')
+    
+    fragment.querySelector(".cardbox__btn-complete").classList.add('hidden')
+  }
+}
+
+
+
 
 
 
@@ -111,6 +140,10 @@ function render(anchor, fragment) {
 
 
 async function loginPage() {
+  
+  document.querySelector(".login").classList.remove("hidden")
+  document.querySelector(".index").classList.add("hidden")
+  document.querySelector(".project").classList.add("hidden")
 
   swipe()
 
@@ -141,6 +174,10 @@ async function indexPage() {
   
   const userid = 1
 
+  document.querySelector(".login").classList.add("hidden")
+  document.querySelector(".index").classList.remove("hidden")
+  document.querySelector(".project").classList.add("hidden")
+
   swipe() 
 
    //-------------------header--------------------------------
@@ -152,6 +189,10 @@ async function indexPage() {
 
         headerFrag.querySelector(".header__newCardbox-btn").addEventListener("click", e => {
           e.preventDefault()
+          
+          newCardboxModalBegin.value = moment().format("YYYY-MM-DD")
+          newcardboxModalDue.value = moment().format("YYYY-MM-DD")
+
           newCardboxModal.classList.add("is-active")
         })
 
@@ -168,6 +209,7 @@ async function indexPage() {
 
         newcardboxSubmitBtn.addEventListener('click', async e=> {
           e.preventDefault()
+
           const res = await postAPI.post('./projects', {
             title : newCardboxModalTitle.value,
             startDate : newCardboxModalBegin.value,
@@ -222,8 +264,8 @@ async function indexPage() {
   
   const resCardbox = await postAPI.get('./projects')
   const resTaskIndex = await postAPI.get('./tasks')
-  
-  sortDate(resCardbox.data).forEach( async cardbox => {
+
+  sortComplete(sortDate(resCardbox.data)).forEach( async cardbox => {
     
     
     let cardboxId = cardbox.id
@@ -244,15 +286,11 @@ async function indexPage() {
         return k
       })
 
-      console.log(processedArr)
-
       if(processedArr.length > 0){
         recentTask = processedArr[0].id
       } else { recentTask = 0}
 
       //----///----- I Hate REST API ---///-------///
-
-      console.log(recentTask)
 
       projectPage(cardboxId)
     })
@@ -289,29 +327,48 @@ async function indexPage() {
       cardboxEditDue.value = moment(cardboxEditRes.data.dueDate).format("YYYY-MM-DD")
       cardboxEditModal.classList.add("is-active")
     })
+
+    cardboxBtnComplete.addEventListener("click", async e => {
+      e.preventDefault()
+      const res = await postAPI.patch(`./projects/${cardboxId}`,{
+        complete : 1,
+        update : moment()
+      })
+      indexPage()
+    })
+
+    cardboxBtnDelete.addEventListener("click", async e => {
+      e.preventDefault()
+      const res = await postAPI.delete(`./projects/${cardboxId}`)
+      indexPage()
+    })
+    
+
+
     
     
     
     
     
-    
-    // --- cardbox edit modal submit ---
+    // --- cardbox edit modal close and submit ---
     
     const cardboxEditForm = cardboxFrag.querySelector(".cardbox-edit-modal__form")
-    
-    
+    const cardboxEditClose = cardboxFrag.querySelector(".cardbox-edit-modal__close-btn") 
+     
     cardboxEditForm.addEventListener("submit", async e => {
-
       e.preventDefault()
-
       const res = await postAPI.patch(`./projects/${cardboxId}`, {
         title : e.target.elements.title.value
         ,startDate : e.target.elements.startDate.value
         ,dueDate :e.target.elements.dueDate.value
         ,update : moment()
       })
-
       indexPage()
+    })
+
+    cardboxEditClose.addEventListener("click", e => {
+      e.preventDefault()
+      cardboxEditModal.classList.remove("is-active")
     })
 
 
@@ -382,9 +439,8 @@ async function indexPage() {
     //     cardboxAnchor.appendChild(taskIndexFrag)
     //   }
     // })
- 
 
-
+    completationIndex (cardbox, cardboxFrag)
     contentBodyAnchor.appendChild(cardboxFrag)
    
   })
@@ -405,17 +461,32 @@ async function indexPage() {
 async function projectPage(num) {
 
   const userid = 1
-    
+
+  document.querySelector(".login").classList.add("hidden")
+  document.querySelector(".index").classList.add("hidden")
+  document.querySelector(".project").classList.remove("hidden")
+
   swipe()
 
-  //---------------------project header----------------
-  
-  
+  //-------------project header and Btn------------
+
+  //---- const and variable --- 
+
   const resProject = await postAPI.get(`./projects/${num}`)
   const projectheaderFrag = document.importNode(templates.projectheader, true)
   const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
+
+  const newTaskTitle = projectheaderFrag.querySelector('.newTask-modal__title-input')
+  const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
+  const newTaskDue = projectheaderFrag.querySelector('.newTask-modal__dueDate-input')
+  const newTaskbody = projectheaderFrag.querySelector('.newTask-modal__body-input')
+  const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
+  const newTaskCloseBtn = projectheaderFrag.querySelector('.newTask-modal__close-btn') 
+  
   
   projectheaderFrag.querySelector(".project__newTask").addEventListener("click", e => {
+    newTaskBegin.value = moment().format("YYYY-MM-DD")
+    newTaskDue.value = moment().format("YYYY-MM-DD")
     e.preventDefault()
     newTaskModal.classList.add("is-active")
   })
@@ -429,16 +500,7 @@ async function projectPage(num) {
   projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + moment(resProject.data.dueDate).format('YYYY-MM-DD')
 
   
-  //----new modaled---
-  
-  
-  const newTaskTitle = projectheaderFrag.querySelector('.newTask-modal__title-input')
-  const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
-  const newTaskDue = projectheaderFrag.querySelector('.newTask-modal__dueDate-input')
-  const newTaskbody = projectheaderFrag.querySelector('.newTask-modal__body-input')
-  const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
-  const newTaskCloseBtn = projectheaderFrag.querySelector('.newTask-modal__close-btn') 
-
+  //----new task modaled---
   
   
   newTaskSubmitBtn.addEventListener("click", async e => {
@@ -458,7 +520,10 @@ async function projectPage(num) {
     })
     
     const resTask = await postAPI.get('./tasks') 
-    recentTask = resTask.data.reverse().id + 1
+    console.log("resTask", resTask)
+    console.log("secret", sortLateTask(resTask.data)[0])
+    recentTask = sortLateTask(resTask.data)[0].id + 1
+    console.log(recentTask)
 
     projectPage(num)
   })
@@ -580,7 +645,7 @@ async function projectPage(num) {
         })
 
 
-        completation (task, taskProjectFrag)
+        completationProject (task, taskProjectFrag)
         render(anchor.projectTask, taskProjectFrag)
       }
     })
@@ -600,6 +665,8 @@ async function projectPage(num) {
   commentFrag.querySelector(".comment__form").addEventListener("submit", async e=> {
 
     e.preventDefault()
+
+    console.log("get in form ", recentTask)
 
     if(e.target.elements.body.value) {
       const res = await postAPI.post("./comments", {
