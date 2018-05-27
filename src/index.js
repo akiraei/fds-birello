@@ -34,6 +34,7 @@ const templates = {
   content : document.querySelector('#content').content,
   label : document.querySelector('#label').content,
   cardbox : document.querySelector('#cardbox').content,
+  cardboxLabel : document.querySelector('#cardbox__label').content,
   taskIndex : document.querySelector('#task-index').content,
   projectheader : document.querySelector('#project__header').content,
   taskProject : document.querySelector('#task-project').content,
@@ -42,13 +43,13 @@ const templates = {
   footer : document.querySelector('#footer').content
 }
 
-//-----------------------function----------------------------------
-//-----------------------function----------------------------------
-//-----------------------function----------------------------------
+//-----------------------function-------------------------
+//-----------------------function-------------------------
+//-----------------------function-------------------------
 
 function sortDate (arr) {
   let value =  arr.sort( function (a,b) {
-    let k = b.update - a.update
+    let k = moment(b.update).format('x') - moment(a.update).format('x')
     return k
   })
   return value
@@ -58,12 +59,12 @@ function sortDate (arr) {
 
 function sortOrgDate (arr) {
   let value =  arr.sort( function (a,b) {
-    let k = b.orgDate - a.orgDate
+
+    let k = moment(b.orgDate).format('x') - moment(a.orgDate).format('x')
     return k
   })
   return value
 }
-
 
 
 function completation (task, fragment) {
@@ -84,13 +85,8 @@ function swipe() {
   
   let arr = document.querySelectorAll(".anchor")
   arr.forEach( e => {
-    // console.log(e)
     e.textContent = ""
   })
-
-  // console.log(arr)
-  // console.log("swiping")
-
 }
 
 
@@ -100,7 +96,6 @@ function render(anchor, fragment) {
   // anchor.textContent = ""; 
   
   anchor.appendChild(fragment);
-  console.log("render")
 }
 
 //----------------template section-----------------------------
@@ -125,6 +120,7 @@ async function loginPage() {
     const payload = {
       username : e.target.elements.id.value,
       password: e.target.elements.pw.value
+      ,identity : "user"
     }
 
     e.preventDefault()
@@ -150,7 +146,7 @@ async function indexPage() {
    //-------------------header--------------------------------
   const headerFrag = document.importNode(templates.header, true)
 
-        //logOut Btn, New Project setting needed
+        //logOut Btn setting needed
 
         const newCardboxModal = headerFrag.querySelector(".newCardbox-modal")
 
@@ -175,9 +171,10 @@ async function indexPage() {
           const res = await postAPI.post('./projects', {
             title : newCardboxModalTitle.value,
             startDate : newCardboxModalBegin.value,
-            dueDate : newcardboxModalDue.value,
-            orgDate : 1,
-            update : 1
+            dueDate : moment(newcardboxModalDue.value),
+            orgDate : moment(),
+            update : moment()
+            ,identity : "project"
           })
           indexPage()
         })
@@ -193,7 +190,7 @@ async function indexPage() {
   const contentFrag = document.importNode(templates.content, true)
 
 
-  // .....................label......................
+  // ....label.......
  
  
   const contentHeaderAnchor = contentFrag.querySelector(".content__header-anchor")
@@ -218,7 +215,7 @@ async function indexPage() {
   
 
 
-  //................body...................
+  //....body.....
 
   
   const contentBodyAnchor = contentFrag.querySelector(".content__body-anchor")
@@ -231,22 +228,115 @@ async function indexPage() {
     
     let cardboxId = cardbox.id
     
-    
     const cardboxFrag = document.importNode(templates.cardbox, true)
 
 
-    cardboxFrag.querySelector(".cardbox__container").addEventListener("click", e => {
+    cardboxFrag.querySelector(".cardbox__title").addEventListener("click", e => {
+
+
       e.preventDefault()
-      recentTask = 0;
+
+
+      //----///----- I Hate REST API ------///-----///
+
+      const processedArr = resTaskIndex.data.filter( e => {
+        let k = e.projectId === cardboxId
+        return k
+      })
+
+      console.log(processedArr)
+
+      if(processedArr.length > 0){
+        recentTask = processedArr[0].id
+      } else { recentTask = 0}
+
+      //----///----- I Hate REST API ---///-------///
+
+      console.log(recentTask)
+
       projectPage(cardboxId)
     })
  
-
     const cardboxAnchor = cardboxFrag.querySelector(".cardbox__anchor")
-    
-    cardboxFrag.querySelector(".cardbox__title").textContent = cardbox.title 
-    cardboxFrag.querySelector(".cardbox__update").textContent = "updata " + cardbox.update
 
+    cardboxFrag.querySelector(".cardbox__title").textContent = cardbox.title 
+    cardboxFrag.querySelector(".cardbox__update").textContent = "update " + moment(cardbox.update).format('YYYY-MM-DD')
+    cardboxFrag.querySelector(".cardbox__dueDate").textContent = "due date " + moment(cardbox.dueDate).format('YYYY-MM-DD')
+
+
+    // --- cardbox btn ---
+
+
+
+    const cardboxEditRes = await postAPI.get(`./projects/${cardboxId}`)
+
+    const cardboxEditModal = cardboxFrag.querySelector(".cardbox-edit-modal")
+
+    const cardboxBtnEdit = cardboxFrag.querySelector(".cardbox__btn-edit")
+    const cardboxBtnComplete = cardboxFrag.querySelector(".cardbox__btn-complete")
+    const cardboxBtnDelete = cardboxFrag.querySelector(".cardbox__btn-delete")
+
+
+    const cardboxEditTitle = cardboxFrag.querySelector(".cardbox-edit-modal__title-input")
+    const cardboxEditBegin = cardboxFrag.querySelector(".cardbox-edit-modal__startDate-input")
+    const cardboxEditDue = cardboxFrag.querySelector
+    (".cardbox-edit-modal__dueDate-input")
+
+    cardboxBtnEdit.addEventListener("click", e => {
+      e.preventDefault()
+      cardboxEditTitle.value = cardboxEditRes.data.title
+      cardboxEditBegin.value = moment(cardboxEditRes.data.startDate).format("YYYY-MM-DD")
+      cardboxEditDue.value = moment(cardboxEditRes.data.dueDate).format("YYYY-MM-DD")
+      cardboxEditModal.classList.add("is-active")
+    })
+    
+    
+    
+    
+    
+    
+    // --- cardbox edit modal submit ---
+    
+    const cardboxEditForm = cardboxFrag.querySelector(".cardbox-edit-modal__form")
+    
+    
+    cardboxEditForm.addEventListener("submit", async e => {
+
+      e.preventDefault()
+
+      const res = await postAPI.patch(`./projects/${cardboxId}`, {
+        title : e.target.elements.title.value
+        ,startDate : e.target.elements.startDate.value
+        ,dueDate :e.target.elements.dueDate.value
+        ,update : moment()
+      })
+
+      indexPage()
+    })
+
+
+
+    // -- cardbox label --
+    ////////////////// please  rest api ////////////////////
+
+    const cardboxLabelAnchor = cardboxFrag.querySelector(".cardbox__label-anchor")
+
+    const Thakky = resTaskIndex.data.filter( e => {return e.projectId === cardboxId})
+    let processedLabelArr =[]
+    Thakky.forEach( el => {
+      processedLabelArr.push(resLabel.data.filter( e => {return e.taskId === el.id})[0])
+    })
+    
+        processedLabelArr.forEach(label => {
+      if(label) {
+        const cardboxLabelFrag = document.importNode(templates.cardboxLabel, true)
+        
+        cardboxLabelFrag.querySelector('.cardbox__label').textContent = label.title
+        
+        render(cardboxLabelAnchor, cardboxLabelFrag)
+      }
+    })
+    ////////////////// please  rest api ////////////////////
 
 
 
@@ -256,9 +346,7 @@ async function indexPage() {
       sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
       
         const taskIndexFrag = document.importNode(templates.taskIndex, true)
-        
-        // console.log("log5", taskIndex)
-  
+
         if(taskIndex.projectId === cardbox.id) {
           taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
           cardboxAnchor.appendChild(taskIndexFrag)
@@ -269,8 +357,13 @@ async function indexPage() {
       for (let i = 0; i < 3; i++) {
 
         const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        
 
-      if(sortOrgDate(resTaskIndex.data)[i].projectId === cardbox.id) {
+
+      if(
+        (sortOrgDate(resTaskIndex.data).lenght === 0) &&
+         (sortOrgDate(resTaskIndex.data)[i].projectId === cardbox.id)
+        ){
         taskIndexFrag.querySelector(".task-index__title").textContent = sortOrgDate(resTaskIndex.data)[i].title
         cardboxAnchor.appendChild(taskIndexFrag)
       }
@@ -280,12 +373,9 @@ async function indexPage() {
     
 
 
-
     // sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
       
     //   const taskIndexFrag = document.importNode(templates.taskIndex, true)
-      
-    //   // console.log("log5", taskIndex)
 
     //   if(taskIndex.projectId === cardbox.id) {
     //     taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
@@ -293,10 +383,6 @@ async function indexPage() {
     //   }
     // })
  
-
-
-
-
 
 
     contentBodyAnchor.appendChild(cardboxFrag)
@@ -319,24 +405,15 @@ async function indexPage() {
 async function projectPage(num) {
 
   const userid = 1
-
-  console.log("projectPage just get in")
     
   swipe()
-
-  console.log("init swipe")
 
   //---------------------project header----------------
   
   
   const resProject = await postAPI.get(`./projects/${num}`)
-  
-  console.log("resproject", resProject.data)
-
   const projectheaderFrag = document.importNode(templates.projectheader, true)
   const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
-
-
   
   projectheaderFrag.querySelector(".project__newTask").addEventListener("click", e => {
     e.preventDefault()
@@ -349,7 +426,7 @@ async function projectPage(num) {
 
   projectheaderFrag.querySelector(".project__title").textContent = resProject.data.title
 
-  projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + resProject.data.dueDate
+  projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + moment(resProject.data.dueDate).format('YYYY-MM-DD')
 
   
   //----new modaled---
@@ -366,18 +443,23 @@ async function projectPage(num) {
   
   newTaskSubmitBtn.addEventListener("click", async e => {
     e.preventDefault()
+
     const res = await postAPI.post('./tasks', {
       projectId : num,
       title : newTaskTitle.value,
       body : newTaskbody.value,
-      orgDate : 1,
-      update : 1,
+      orgDate : moment(),
+      update : moment(),
       startDate : newTaskBegin,
-      dueDate : newTaskDue.value,
+      dueDate : moment(newTaskDue.value),
       complete : 0,
       userId : userid
+      ,indentity : "task"
     })
-    recentTask = 0;
+    
+    const resTask = await postAPI.get('./tasks') 
+    recentTask = resTask.data.reverse().id + 1
+
     projectPage(num)
   })
   
@@ -394,8 +476,6 @@ async function projectPage(num) {
 
   
   const resTaskProject = await postAPI.get('./tasks?_expand=user')
-
-  // recentTask = sortOrgDate(resTaskProject.data)[0].id
   
   sortOrgDate(resTaskProject.data).forEach( task => {
     
@@ -406,17 +486,14 @@ async function projectPage(num) {
       taskProjectFrag.querySelector(".task-project__content-container").addEventListener("click", e => {
 
         e.preventDefault()
-
-        console.log("before", recentTask)
-        recentTask = task.id
-        console.log("after", recentTask)
+        recentTask = task.id 
         projectPage(num)
       })
         
         taskProjectFrag.querySelector(".task-project__title").textContent = task.title
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
         taskProjectFrag.querySelector(".task-project__username").textContent = task.user.username
-        taskProjectFrag.querySelector(".task-project__update").textContent = task.update
+        taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
 
 
         //------------- op Btn func --------------
@@ -444,7 +521,9 @@ async function projectPage(num) {
         
         completeBtn.addEventListener("click", async e => {
           e.preventDefault();
-          const res = await postAPI.patch(`./tasks/${task.id}`, {complete:1})
+          const res = await postAPI.patch(`./tasks/${task.id}`, {complete:1
+            ,update : moment()
+          })
           projectPage(num)                                 
         })      
         
@@ -474,7 +553,7 @@ async function projectPage(num) {
         
         taskProjectFrag.querySelector(".edit-modal__username").textContent = task.user.username
         
-        updateModal.textContent = "update" + task.update
+        updateModal.textContent = "update " + moment(task.update).format('YYYY-MM-DD')
         
         titleModal.value = task.title
         
@@ -492,38 +571,13 @@ async function projectPage(num) {
           const res = await postAPI.patch(`./tasks/${task.id}`,
           { title: titleModal.value,
           body : bodyModal.value,
-          update : task.update + 1        
+          update : moment()       
           })
 
           editModal.classList.remove("is-active")
         
           projectPage(num)
         })
-
-
-       
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
 
 
         completation (task, taskProjectFrag)
@@ -537,17 +591,26 @@ async function projectPage(num) {
   //---project comment input
   const commentFrag = document.importNode(templates.comment, true)
 
+  if(recentTask === 0){
+    commentFrag.querySelector(".comment__submit-btn").classList.add('hidden')
+  } else {
+    commentFrag.querySelector(".comment__submit-btn").classList.remove('hidden')
+  }
+
   commentFrag.querySelector(".comment__form").addEventListener("submit", async e=> {
 
     e.preventDefault()
 
-    const res = await postAPI.post("./comments", {
-      userId : userid,
-      taskId : recentTask,
-      body : e.target.elements.body.value,
-      orgDate : 10
-    })
-    projectPage(num)
+    if(e.target.elements.body.value) {
+      const res = await postAPI.post("./comments", {
+        userId : userid,
+        taskId : recentTask,
+        body : e.target.elements.body.value,
+        orgDate : moment()
+        ,identity : "comment"
+      })
+      projectPage(num)
+    }
   })
   anchor.projectComment.appendChild(commentFrag)
   
@@ -557,16 +620,12 @@ async function projectPage(num) {
   const resCommentContent = await postAPI.get('./comments?_expand=user')
    sortOrgDate(resCommentContent.data).forEach( comment => {
 
-    console.log("get in co-co", resCommentContent.data, comment.taskId)
-
     if (comment.taskId === recentTask) {        
      const commentContentFrag = document.importNode(templates.commentContent, true)
 
      commentContentFrag.querySelector(".comment-content__body").textContent = comment.body
      commentContentFrag.querySelector(".comment-content__username").textContent = comment.user.username
-     commentContentFrag.querySelector(".comment-content__originDate").textContent = "date" + comment.orgDate
-
-     console.log(commentFrag.content)
+     commentContentFrag.querySelector(".comment-content__originDate").textContent = "record date " + moment(comment.orgDate).format('YYYY-MM-DD')
 
      anchor.projectComment.appendChild(commentContentFrag)
     }

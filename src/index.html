@@ -190,10 +190,103 @@
 <template id="cardbox">
   <div class="cardbox__container">
     <h3 class="cardbox__title"></h3>
+
+    <div class="cardbox__btn-container">
+        <div class="cardbox__btn-edit button">edit</div>
+        <div class="cardbox__btn-complete button">complete</div>
+        <div class="cardbox__btn-delete button">delete</div>
+      </div>
+
+    <div class="anchor cardbox__label-anchor"></div>
+    <div class="cardbox__dueDate"></div>
     <div class="cardbox__update"></div> <!-- only this will sort by update -->
+
+
+    <div class="cardbox-edit-modal modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+  
+            <form class="cardbox-edit-modal__form  decover">       
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label">Title</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input name="title" class="cardbox-edit-modal__title-input input is-danger" type="text" placeholder="title">
+                      </div>
+                      <p class="help is-danger">
+                        This field is required
+                      </p>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Begin</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input name="startDate" class="cardbox-edit-modal__startDate-input input is-danger" type="date" placeholder="title">
+                        </div>
+                        <p class="help is-danger">
+                          This field is required
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <label class="label">Due</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <input name="dueDate" class="cardbox-edit-modal__dueDate-input input is-danger" type="date" placeholder="title">
+                          </div>
+                          <p class="help is-danger">
+                            This field is required
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+        
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <button class="cardbox-edit-modal__submit-btn button is-primary">
+                              edit
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+        </div>
+        
+        <button class="newTask-modal__close-btn modal-close is-large" aria-label="close"></button>
+      </div>
+      </div>
+  
+
+
     <div class="cardbox__anchor"></div>
   </div>
 </template>
+
+
+<template id="cardbox__label">
+  <span class="cardbox__label"></span>
+</template>
+
 
 
 <template id="task-index">
@@ -573,6 +666,10 @@
 </template>
 
 
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
   <script src="./index.js"></script>
 </body>
 </html>
