@@ -412,7 +412,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="newTask-modal__title-input input is-danger" type="text" placeholder="title">
+                <input name='title' class="newTask-modal__title-input input is-danger" type="text" placeholder="title">
               </div>
               <p class="help is-danger">
                 This field is required
@@ -428,7 +428,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="newTask-modal__startDate-input input is-danger" type="date" placeholder="title">
+                <input name='begin' class="newTask-modal__startDate-input input is-danger" type="date">
               </div>
               <p class="help is-danger">
                 This field is required
@@ -444,7 +444,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="newTask-modal__dueDate-input input is-danger" type="date" placeholder="title">
+                <input name='due' class="newTask-modal__dueDate-input input is-danger" type="date">
               </div>
               <p class="help is-danger">
                 This field is required
@@ -460,7 +460,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <textarea class="newTask-modal__body-input textarea" placeholder="body"></textarea>
+                <textarea name='body' class="newTask-modal__body-input textarea" placeholder="body"></textarea>
               </div>
             </div>
           </div>
@@ -475,7 +475,7 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <div class="newTask-modal__radio-anchor anchor"></div>
+                  <div name='radio' class="newTask-modal__radio-anchor anchor"></div>
                 </div>
               </div>
             </div>
@@ -632,7 +632,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="edit-modal__title-input input is-danger" type="text" placeholder="title">
+                <input name="title" class="edit-modal__title-input input is-danger" type="text" placeholder="title">
               </div>
               <p class="help is-danger">
                 This field is required
@@ -650,17 +650,54 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                    <textarea class="edit-modal__body-input textarea" placeholder="body"></textarea>
+                    <textarea name="body" class="edit-modal__body-input textarea" placeholder="body"></textarea>
                   </div>
                 </div>
               </div>
             </div>
-            
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">begin</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                    <input name="begin" class="edit-modal__begin-input input" type="date">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">due</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                      <input name="due" class="edit-modal__due-input input" type="date">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Label</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                    <div name='radio' class="edit-modal__radio-anchor anchor"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             
             <div class="field is-horizontal">
               <div class="field-label">
-
               </div>
               <div class="field-body">
                 <div class="field">
@@ -680,6 +717,13 @@
         <button class="modal-close edit-modal__close-btn is-large" aria-label="close"></button>
 
         </div> 
+        </template>
+
+        <template id="edit-modal__labelList"> <!-- developing -->
+          <label class="radio">
+              <input class="edit-modal__labelList-radio" type="radio" name="radio">
+              <span class="edit-modal__labelList-title"></span>
+            </label>
         </template>
         
         

@@ -40,7 +40,9 @@ const templates = {
   comment : document.querySelector('#comment').content,
   commentContent : document.querySelector('#comment-content').content,
   footer : document.querySelector('#footer').content,
-  radio : document.querySelector('#newTask-modal__labelList').content
+  radio : document.querySelector('#newTask-modal__labelList').content,
+  radio__edit : document.querySelector('#edit-modal__labelList').content
+  
 }
 
 //-----------------------function-------------------------
@@ -559,7 +561,7 @@ async function projectPage(num) {
   //-------------project header and Btn------------
 
 
-  // new task modal
+  // new task modal setting
 
   const resProject = await postAPI.get(`./projects/${num}`)
   const projectheaderFrag = document.importNode(templates.projectheader, true)
@@ -569,7 +571,8 @@ async function projectPage(num) {
   const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
   const newTaskDue = projectheaderFrag.querySelector('.newTask-modal__dueDate-input')
   const newTaskbody = projectheaderFrag.querySelector('.newTask-modal__body-input')
-  const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
+  // const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
+  const newTaskForm = projectheaderFrag.querySelector('.newTask-modal__form')
   const newTaskCloseBtn = projectheaderFrag.querySelector('.newTask-modal__close-btn') 
   
   
@@ -595,45 +598,99 @@ async function projectPage(num) {
   const newTaskRadioAnchor = projectheaderFrag.querySelector('.newTask-modal__radio-anchor') 
   const resLabelRadio = await postAPI.get('./labels')
   resLabelRadio.data.forEach( e => {
-    console.log("radio", e.projectId, num)
     if(e.projectId === num) {
       const labelRadioFrag = document.importNode(templates.radio, true)
+      labelRadioFrag.querySelector('.newTask-modal__labelList-radio').value = e.id
       labelRadioFrag.querySelector('.newTask-modal__labelList-title').textContent = e.title
       render(newTaskRadioAnchor, labelRadioFrag)
     }
   })
+    
+  // newTaskSubmitBtn.addEventListener("click", async e => {
+  //   e.preventDefault()
 
-  // new label modal
+  //   const res = await postAPI.post('./tasks', {
+  //     projectId : num,
+  //     title : newTaskTitle.value,
+  //     body : newTaskbody.value,
+  //     orgDate : moment(),
+  //     update : moment(),
+  //     startDate : newTaskBegin,
+  //     dueDate : moment(newTaskDue.value),
+  //     complete : 0,
+  //     userId : userid
+  //     ,indentity : "task"
+  //   })
 
-  const labelPlus = projectheaderFrag.querySelector(".project__header-label-plus")
-  const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")
-  const newLabelForm = projectheaderFrag.querySelector(".newLabel-modal__form")
-  const newLabelClose = projectheaderFrag.querySelector(".newLabel-modal__close-btn")
+  newTaskForm.addEventListener("submit", async e => {
+  e.preventDefault()
+  
+  // let labelId;
+  const resLabel = await postAPI.get('./labels')
+  // console.log("reslabel.data", resLabel.data)
+  // resLabel.data.forEach( el => {
+  //   if( el.title === e.target.elements.radio.value){
+  //     labelId = parseInt(el.id)
+  //   }
+  // })
 
- labelPlus.addEventListener('click', e => {
-    e.preventDefault()
-    newLabelModal.classList.add("is-active")
-  })
-
-  newLabelClose.addEventListener('click', e => {
-    e.preventDefault()
-    newLabelModal.classList.remove("is-active")
-  })
-
-  newLabelForm.addEventListener("submit", async e => {
-    e.preventDefault()
-    const payload = {
-      userId : userid,
+    const res = await postAPI.post('./tasks', {
       projectId : num,
       title : e.target.elements.title.value,
-      identity : "label"
-    }
-    const res = await postAPI.post('./labels', payload)
+      body : e.target.elements.body.value,
+      orgDate : moment(),
+      update : moment(),
+      startDate : e.target.elements.begin.value,
+      dueDate : moment(e.target.elements.due.value,),
+      complete : 0,
+      userId : userid
+      ,indentity : "task"
+      ,label : e.target.elements.radio.value
+    })
+    
+    const resTask = await postAPI.get('./tasks') 
+    recentTask = sortLateTask(resTask.data)[0].id
+
     projectPage(num)
   })
+  
+  newTaskCloseBtn.addEventListener("click", e => {
+    e.preventDefault()
+    newTaskModal.classList.remove("is-active")
+    })
 
 
   // ----another div of project header for label -----
+
+    // new label modal
+
+    const labelPlus = projectheaderFrag.querySelector(".project__header-label-plus")
+    const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")
+    const newLabelForm = projectheaderFrag.querySelector(".newLabel-modal__form")
+    const newLabelClose = projectheaderFrag.querySelector(".newLabel-modal__close-btn")
+  
+   labelPlus.addEventListener('click', e => {
+      e.preventDefault()
+      newLabelModal.classList.add("is-active")
+    })
+  
+    newLabelClose.addEventListener('click', e => {
+      e.preventDefault()
+      newLabelModal.classList.remove("is-active")
+    })
+  
+    newLabelForm.addEventListener("submit", async e => {
+      e.preventDefault()
+      const payload = {
+        userId : userid,
+        projectId : num,
+        title : e.target.elements.title.value,
+        identity : "label"
+      }
+      const res = await postAPI.post('./labels', payload)
+      projectPage(num)
+    })
+
 
   const projectLabelAnchor = projectheaderFrag.querySelector(".project__header-label-anchor")
 
@@ -662,34 +719,35 @@ async function projectPage(num) {
   //----new task modaled---
   
   
-  newTaskSubmitBtn.addEventListener("click", async e => {
-    e.preventDefault()
+  // newTaskSubmitBtn.addEventListener("click", async e => {
+  //   e.preventDefault()
 
-    const res = await postAPI.post('./tasks', {
-      projectId : num,
-      title : newTaskTitle.value,
-      body : newTaskbody.value,
-      orgDate : moment(),
-      update : moment(),
-      startDate : newTaskBegin,
-      dueDate : moment(newTaskDue.value),
-      complete : 0,
-      userId : userid
-      ,indentity : "task"
-    })
+  //   const res = await postAPI.post('./tasks', {
+  //     projectId : num,
+  //     title : newTaskTitle.value,
+  //     body : newTaskbody.value,
+  //     orgDate : moment(),
+  //     update : moment(),
+  //     startDate : newTaskBegin,
+  //     dueDate : moment(newTaskDue.value),
+  //     complete : 0,
+  //     userId : userid
+  //     ,indentity : "task"
+  //   })
     
-    const resTask = await postAPI.get('./tasks') 
+  //   const resTask = await postAPI.get('./tasks') 
 
-    recentTask = sortLateTask(resTask.data)[0].id
-    projectPage(num)
-  })
+  //   recentTask = sortLateTask(resTask.data)[0].id
+  //   projectPage(num)
+  // })
   
-  newTaskCloseBtn.addEventListener("click", e => {
-    e.preventDefault()
-    newTaskModal.classList.remove("is-active")
-    })
+  // newTaskCloseBtn.addEventListener("click", e => {
+  //   e.preventDefault()
+  //   newTaskModal.classList.remove("is-active")
+  //   })
     
-    anchor.projectHeader.appendChild(projectheaderFrag) //append project header!!!
+    anchor.projectHeader.appendChild(projectheaderFrag) 
+    //append project header!!!
   
   
   //------------------project task --------------------------
@@ -717,6 +775,12 @@ async function projectPage(num) {
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
         taskProjectFrag.querySelector(".task-project__username").textContent = task.user.username
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
+
+        taskProjectFrag.querySelector(".task-project__label").textContent = (resLabel.data.filter( e => {
+          return e.id === parseInt(task.label)
+        })[0]) ? resLabel.data.filter( e => {
+          return e.id === parseInt(task.label)
+        })[0].title : ""
 
         
 
@@ -774,35 +838,81 @@ async function projectPage(num) {
         const updateModal = taskProjectFrag.querySelector(".edit-modal__update")
         const titleModal = taskProjectFrag.querySelector(".edit-modal__title-input")
         const bodyModal = taskProjectFrag.querySelector(".edit-modal__body-input")
+        const begin = taskProjectFrag.querySelector(".edit-modal__begin-input")
+        const due = taskProjectFrag.querySelector(".edit-modal__due-input")
+        const taskEditModalForm = taskProjectFrag.querySelector(".edit-modal__form")  
         
         
         taskProjectFrag.querySelector(".edit-modal__username").textContent = task.user.username
-        
         updateModal.textContent = "update " + moment(task.update).format('YYYY-MM-DD')
-        
         titleModal.value = task.title
-        
         bodyModal.value = task.body
-        
+        begin.value = moment(task.startDate).format("YYYY-MM-DD")
+        due.value = moment(task.dueDate).format("YYYY-MM-DD")
+       
         taskProjectFrag.querySelector(".edit-modal__close-btn").addEventListener("click", e=> {
           e.preventDefault();
           editModal.classList.remove("is-active")
         })
 
+        const editRadioAnchor =  taskProjectFrag.querySelector(".edit-modal__radio-anchor")
 
-        taskProjectFrag.querySelector('.edit-modal__submit-btn').addEventListener("click", async e=> {
+
+        // edit modal label list  
+
+        resLabel.data.forEach( e => {
+          if(e.projectId === num) {
+            const labelRadioFrag = document.importNode(templates.radio__edit, true)
+            const labelTitle = labelRadioFrag.querySelector('.edit-modal__labelList-title')
+            const labelRadio = labelRadioFrag.querySelector('.edit-modal__labelList-radio')
+            labelTitle.textContent = e.title
+            labelRadio.value = e.id
+
+            if(e.id === parseInt(task.label)){
+              labelRadio.setAttribute("checked", "")
+            }
+
+            render(editRadioAnchor, labelRadioFrag)
+          }
+        })
+
+
+
+        taskEditModalForm.addEventListener("submit", async e=> {
           e.preventDefault();
 
+          /// how i can get label id from html in template?
+
           const res = await postAPI.patch(`./tasks/${task.id}`,
-          { title: titleModal.value,
-          body : bodyModal.value,
-          update : moment()       
+          { title: e.target.elements.title.value,
+          body : e.target.elements.body.value,
+          update : moment(),
+          dueDate : e.target.elements.due.value,
+          startDate : e.target.elements.begin.value,
+          label : e.target.elements.radio.value
           })
+
 
           editModal.classList.remove("is-active")
         
           projectPage(num)
         })
+
+
+
+        // taskProjectFrag.querySelector('.edit-modal__submit-btn').addEventListener("click", async e=> {
+        //   e.preventDefault();
+
+        //   const res = await postAPI.patch(`./tasks/${task.id}`,
+        //   { title: titleModal.value,
+        //   body : bodyModal.value,
+        //   update : moment()       
+        //   })
+
+        //   editModal.classList.remove("is-active")
+        
+        //   projectPage(num)
+        // })
 
 
         completationProject (task, taskProjectFrag)

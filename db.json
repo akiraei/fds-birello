@@ -234,13 +234,14 @@
       "title": "ㅁㅇㄹㄴ",
       "body": "ㅁㄴㅇㄹ",
       "orgDate": "2018-05-28T03:33:08.359Z",
-      "update": "2018-05-28T03:33:08.359Z",
-      "startDate": {},
-      "dueDate": "2018-05-27T15:00:00.000Z",
+      "update": "2018-05-28T16:56:23.546Z",
+      "startDate": "2018-05-28",
+      "dueDate": "2018-05-28",
       "complete": 0,
       "userId": 1,
       "indentity": "task",
-      "id": 16
+      "id": 16,
+      "label": "3"
     },
     {
       "projectId": 8,
@@ -254,6 +255,62 @@
       "userId": "2",
       "indentity": "task",
       "id": 17
+    },
+    {
+      "projectId": 5,
+      "title": "asdf",
+      "body": "asdf",
+      "orgDate": "2018-05-28T17:04:56.487Z",
+      "update": "2018-05-28T17:04:56.487Z",
+      "startDate": "2018-05-29",
+      "dueDate": "2018-05-28T15:00:00.000Z",
+      "complete": 0,
+      "userId": "1",
+      "indentity": "task",
+      "id": 18,
+      "label": 3
+    },
+    {
+      "projectId": 5,
+      "title": "라벨 첵",
+      "body": "아 진짜 꼬인다 코드",
+      "orgDate": "2018-05-28T17:09:34.100Z",
+      "update": "2018-05-28T17:09:47.888Z",
+      "startDate": "2018-05-29",
+      "dueDate": "2018-05-29",
+      "complete": 0,
+      "userId": "1",
+      "indentity": "task",
+      "id": 19,
+      "label": "4"
+    },
+    {
+      "projectId": 5,
+      "title": "퍼니셔",
+      "body": "퍼니셔퍼니셔",
+      "orgDate": "2018-05-28T17:12:28.350Z",
+      "update": "2018-05-28T17:12:28.350Z",
+      "startDate": "2018-05-29",
+      "dueDate": "2018-05-28T15:00:00.000Z",
+      "complete": 0,
+      "userId": "1",
+      "indentity": "task",
+      "label": "on",
+      "id": 20
+    },
+    {
+      "projectId": 5,
+      "title": "데어",
+      "body": "데블",
+      "orgDate": "2018-05-28T17:14:22.389Z",
+      "update": "2018-05-28T17:14:22.389Z",
+      "startDate": "2018-05-29",
+      "dueDate": "2018-05-28T15:00:00.000Z",
+      "complete": 0,
+      "userId": "1",
+      "indentity": "task",
+      "label": "3",
+      "id": 21
     }
   ],
   "comments": [
@@ -371,51 +428,11 @@
     },
     {
       "userId": 1,
-      "taskId": 14,
-      "body": "ㅁㄴㄻ",
-      "orgDate": "2018-05-27T14:47:23.808Z",
-      "identity": "comment",
-      "id": 23
-    },
-    {
-      "userId": 1,
-      "taskId": 14,
-      "body": "ㅁㄹㅇㄴㄻ",
-      "orgDate": "2018-05-27T14:47:24.799Z",
-      "identity": "comment",
-      "id": 24
-    },
-    {
-      "userId": 1,
-      "taskId": 14,
-      "body": "ㅁㅊㅋㅊㅍㅋ",
-      "orgDate": "2018-05-27T14:47:25.850Z",
-      "identity": "comment",
-      "id": 25
-    },
-    {
-      "userId": 1,
-      "taskId": 14,
-      "body": "ㅋㅌㅍㅊㅋㅍ",
-      "orgDate": "2018-05-27T14:47:26.847Z",
-      "identity": "comment",
-      "id": 26
-    },
-    {
-      "userId": 1,
       "taskId": 15,
       "body": "시러어어어",
       "orgDate": "2018-05-28T03:23:08.236Z",
       "identity": "comment",
       "id": 27
-    },
-    {
-      "userId": 1,
-      "taskId": 14,
-      "body": "ㅇㅇㅇ",
-      "orgDate": "2018-05-28T03:23:37.807Z",
-      "identity": "comment",
-      "id": 28
     },
     {
       "userId": 1,
@@ -428,13 +445,6 @@
   ],
   "labels": [
     {
-      "userId": 1,
-      "title": "label 1",
-      "id": 1,
-      "projectId": 5,
-      "identity": "label"
-    },
-    {
       "userId": "1",
       "projectId": 5,
       "title": "라벨 3",
@@ -444,9 +454,9 @@
     {
       "userId": "1",
       "projectId": 5,
-      "title": "라벨 4",
+      "title": "라벨 a",
       "identity": "label",
-      "id": 3
+      "id": 4
     }
   ]
 }
