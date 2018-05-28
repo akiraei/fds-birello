@@ -31,8 +31,8 @@
       "update": "2018-05-27T11:19:34.559Z",
       "identity": "project",
       "id": 1,
-      "complete": 1
-      ,"userId" : 1
+      "complete": 1,
+      "userId": 1
     },
     {
       "title": "두 타이틀",
@@ -42,8 +42,8 @@
       "update": "2018-05-27T12:40:54.142Z",
       "identity": "project",
       "id": 2,
-      "complete": 1
-      ,"userId" : 1
+      "complete": 1,
+      "userId": 1
     },
     {
       "title": "샹계탕",
@@ -53,8 +53,8 @@
       "update": "2018-05-27T14:13:36.247Z",
       "identity": "project",
       "complete": 0,
-      "id": 3
-      ,"userId" : 1
+      "id": 3,
+      "userId": 1
     },
     {
       "title": "ㅇㅇㅇ",
@@ -63,8 +63,8 @@
       "orgDate": "2018-05-27T14:15:46.693Z",
       "update": "2018-05-27T14:15:46.693Z",
       "identity": "project",
-      "id": 4
-      ,"userId" : 1
+      "id": 4,
+      "userId": 1
     },
     {
       "title": "집에 갈래에",
@@ -73,8 +73,29 @@
       "orgDate": "2018-05-28T03:22:53.041Z",
       "update": "2018-05-28T03:22:53.041Z",
       "identity": "project",
-      "id": 5
-      ,"userId" : 1
+      "id": 5,
+      "userId": 1
+    },
+    {
+      "title": "kira 2",
+      "startDate": "2018-05-28",
+      "dueDate": "2018-05-27T15:00:00.000Z",
+      "orgDate": "2018-05-28T05:54:32.112Z",
+      "update": "2018-05-28T05:54:35.826Z",
+      "userId": "2",
+      "identity": "project",
+      "id": 7,
+      "complete": 1
+    },
+    {
+      "title": "kira 1",
+      "startDate": "2018-05-28",
+      "dueDate": "2018-05-27T15:00:00.000Z",
+      "orgDate": "2018-05-28T05:54:41.378Z",
+      "update": "2018-05-28T05:54:41.378Z",
+      "userId": "2",
+      "identity": "project",
+      "id": 8
     }
   ],
   "tasks": [
@@ -220,6 +241,19 @@
       "userId": 1,
       "indentity": "task",
       "id": 16
+    },
+    {
+      "projectId": 8,
+      "title": "tira",
+      "body": "",
+      "orgDate": "2018-05-28T05:55:30.353Z",
+      "update": "2018-05-28T05:55:30.353Z",
+      "startDate": {},
+      "dueDate": "2018-05-27T15:00:00.000Z",
+      "complete": 0,
+      "userId": "2",
+      "indentity": "task",
+      "id": 17
     }
   ],
   "comments": [
@@ -246,22 +280,6 @@
       "orgDate": "2018-05-27T12:16:34.971Z",
       "identity": "comment",
       "id": 3
-    },
-    {
-      "userId": 1,
-      "taskId": 3,
-      "body": "comment",
-      "orgDate": "2018-05-27T12:39:08.844Z",
-      "identity": "comment",
-      "id": 4
-    },
-    {
-      "userId": 1,
-      "taskId": 3,
-      "body": "",
-      "orgDate": "2018-05-27T12:47:46.656Z",
-      "identity": "comment",
-      "id": 5
     },
     {
       "userId": 1,

@@ -9,7 +9,6 @@ import axios from 'axios';
 
 
 let recentTask = 1;
-let recentUserid;
 
 const postAPI = axios.create({
   baseURL: process.env.API_URL
@@ -129,7 +128,7 @@ function login(res) {
   function logout(){
     delete postAPI.defaults.headers['Authorization']
     localStorage.removeItem('token')
-    recentUserid = ""
+    localStorage.removeItem('recentUserid')
     loginPage()
   }
 
@@ -211,9 +210,11 @@ async function loginPage() {
     if(res) {
       const userRes = await postAPI.get('./users')
 
-      recentUserid =  userRes.data.filter( el => {
+      let recentUserid =  userRes.data.filter( el => {
         return el.username === payload.username
       })[0].id
+
+      localStorage.setItem('recentUserid', recentUserid)
     }
     
     e.target.elements.pw.value = ""
@@ -252,8 +253,9 @@ async function loginPage() {
 //------------------- index  page--------------------------
 
 async function indexPage() {
-  
-  const userid = recentUserid
+
+
+  const userid =  localStorage.getItem('recentUserid')
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.remove("hidden")
@@ -351,8 +353,8 @@ async function indexPage() {
 
   sortComplete(sortDate(resCardbox.data)).forEach( async cardbox => {
 
-    if(cardbox.userId === userid){ // project userId matching point
-      
+    if(cardbox.userId.toString() === userid){ // project userId matching point
+
     let cardboxId = cardbox.id
     
     const cardboxFrag = document.importNode(templates.cardbox, true)
@@ -545,7 +547,7 @@ async function indexPage() {
 
 async function projectPage(num) {
 
-  const userid = recentUserid
+  const userid = localStorage.getItem('recentUserid')
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.add("hidden")
@@ -777,6 +779,11 @@ async function projectPage(num) {
      commentContentFrag.querySelector(".comment-content__body").textContent = comment.body
      commentContentFrag.querySelector(".comment-content__username").textContent = comment.user.username
      commentContentFrag.querySelector(".comment-content__originDate").textContent = "record date " + moment(comment.orgDate).format('YYYY-MM-DD')
+     commentContentFrag.querySelector(".comment-content__delete-btn").addEventListener('click', async e => {
+       e.preventDefault()
+       const res = await postAPI.delete(`./comments/${comment.id}`)
+       projectPage(num)
+     })
 
      anchor.projectComment.appendChild(commentContentFrag)
     }
