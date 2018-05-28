@@ -39,7 +39,8 @@ const templates = {
   taskProject : document.querySelector('#task-project').content,
   comment : document.querySelector('#comment').content,
   commentContent : document.querySelector('#comment-content').content,
-  footer : document.querySelector('#footer').content
+  footer : document.querySelector('#footer').content,
+  radio : document.querySelector('#newTask-modal__labelList').content
 }
 
 //-----------------------function-------------------------
@@ -558,7 +559,7 @@ async function projectPage(num) {
   //-------------project header and Btn------------
 
 
-  // new task 
+  // new task modal
 
   const resProject = await postAPI.get(`./projects/${num}`)
   const projectheaderFrag = document.importNode(templates.projectheader, true)
@@ -588,7 +589,21 @@ async function projectPage(num) {
   projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + moment(resProject.data.dueDate).format('YYYY-MM-DD')
 
 
-  // new label
+
+  // new task modal -- radio template
+
+  const newTaskRadioAnchor = projectheaderFrag.querySelector('.newTask-modal__radio-anchor') 
+  const resLabelRadio = await postAPI.get('./labels')
+  resLabelRadio.data.forEach( e => {
+    console.log("radio", e.projectId, num)
+    if(e.projectId === num) {
+      const labelRadioFrag = document.importNode(templates.radio, true)
+      labelRadioFrag.querySelector('.newTask-modal__labelList-title').textContent = e.title
+      render(newTaskRadioAnchor, labelRadioFrag)
+    }
+  })
+
+  // new label modal
 
   const labelPlus = projectheaderFrag.querySelector(".project__header-label-plus")
   const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")

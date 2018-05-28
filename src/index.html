@@ -465,12 +465,26 @@
             </div>
           </div>
         </div>
+
+
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Label</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div class="newTask-modal__radio-anchor anchor"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         
         
         
         <div class="field is-horizontal">
-          <div class="field-label">
-            
+          <div class="field-label">          
           </div>
           <div class="field-body">
             <div class="field">
@@ -489,63 +503,68 @@
     <button class="newTask-modal__close-btn modal-close is-large" aria-label="close"></button>
   </div>
 
+  
   <!-- project new label modal  -->
   <div class="newLabel-modal modal">
     <div class="modal-background"></div>
     <div class="modal-content">
       
-          <form class="newLabel-modal__form  decover">       
-              <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                  <label class="label">Label</label>
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <div class="control">
-                      <input name='title' class="newLabel-modal__title-input input is-danger" type="text" placeholder="title">
-                    </div>
-                    <p class="help is-danger">
-                      This field is required
-                    </p>
-                  </div>
-                </div>
+      <form class="newLabel-modal__form  decover">       
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Label</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input name='title' class="newLabel-modal__title-input input is-danger" type="text" placeholder="title">
               </div>
-  
-                  <div class="field is-horizontal">
-                    <div class="field-label">
-                    </div>
-                    <div class="field-body">
-                      <div class="field">
-                        <div class="control">
-                          <button class="newLabel-modal__submit-btn button is-primary">
-                            create
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                                          
-                </form>
+              <p class="help is-danger">
+                This field is required
+              </p>
+            </div>
+          </div>
+        </div>
         
-      </div>
-      <button class="newLabel-modal__close-btn modal-close is-large" aria-label="close"></button>
+        <div class="field is-horizontal">
+          <div class="field-label">
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <button class="newLabel-modal__submit-btn button is-primary">
+                  create
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </form>
+      
     </div>
-    
+    <button class="newLabel-modal__close-btn modal-close is-large" aria-label="close"></button>
+  </div>  
 </template>
 
-
+<template id="newTask-modal__labelList"> <!-- developing -->
+  <label class="radio">
+      <input class="newTask-modal__labelList-radio" type="radio" name="radio">
+      <span class="newTask-modal__labelList-title"></span>
+    </label>
+</template>
 
 <template id="label">
     <span class="label__content"></span>
     <button class="label__delete-btn button">x</button>  
   </template>
   
-
-
-
+  
+  
+  
   <!-- ===========project content============= -->
   <!-- ===========project content============= -->
-
+  
 
 
   <!-- ===========project task============= -->
@@ -553,15 +572,13 @@
 
 <template id="task-project"> <!-- css, overflow, scroll -->
   
-
-
-
 <!-- project task  -->
   <div class="task-project__content">
 
 
     <div class="task-project__content-container">
       <p class="task-project__title"></p>
+      <span class="task-project__label"></span> <!-- developing  -->
       <p class="task-project__body"></p>
       <span class="task-project__username"></span>
       <span class="task-project__update"></span>
@@ -663,15 +680,6 @@
         <button class="modal-close edit-modal__close-btn is-large" aria-label="close"></button>
 
         </div> 
-
-
-
-
-       
-          
-
-
-          
         </template>
         
         
