@@ -110,6 +110,36 @@ function completationIndex (task, fragment) {
 
 
 
+
+function login(res) {
+  let token;
+    if(localStorage.getItem('token')) {
+      token = localStorage.getItem('token')
+      postAPI.defaults.headers['Authorization'] = `Bearer ${token}`
+      indexPage()
+      
+    } else if (res){
+    localStorage.setItem('token', res.data.token)
+    token = localStorage.getItem('token')
+    postAPI.defaults.headers['Authorization'] = `Bearer ${token}`
+    indexPage()
+    }
+  }
+  
+  function logout(){
+    delete postAPI.defaults.headers['Authorization']
+    localStorage.removeItem('token')
+    loginPage()
+  }
+
+
+
+
+
+
+
+
+
 function swipe() {
   
   let arr = document.querySelectorAll(".anchor")
@@ -153,7 +183,6 @@ async function loginPage() {
     const payload = {
       username : e.target.elements.id.value,
       password: e.target.elements.pw.value
-      ,identity : "user"
     }
 
     e.preventDefault()
@@ -161,6 +190,8 @@ async function loginPage() {
     const res = await postAPI.post('./users/login', payload)
 
     e.target.elements.pw.value = ""
+
+    login(res)
   })
 
   render(anchor.login, fragment)
@@ -183,7 +214,9 @@ async function indexPage() {
    //-------------------header--------------------------------
   const headerFrag = document.importNode(templates.header, true)
 
-        //logOut Btn setting needed
+        headerFrag.querySelector(".header__logout-btn").addEventListener("click", e => {
+          logout()
+        })
 
         const newCardboxModal = headerFrag.querySelector(".newCardbox-modal")
 
@@ -460,6 +493,8 @@ async function indexPage() {
 
 async function projectPage(num) {
 
+  console.log("recentTask", recentTask)
+
   const userid = 1
 
   document.querySelector(".login").classList.add("hidden")
@@ -489,6 +524,7 @@ async function projectPage(num) {
     newTaskDue.value = moment().format("YYYY-MM-DD")
     e.preventDefault()
     newTaskModal.classList.add("is-active")
+    console.log('recentTask', recentTask)
   })
 
   projectheaderFrag.querySelector(".project__goBack").addEventListener("click", e => {
@@ -520,10 +556,11 @@ async function projectPage(num) {
     })
     
     const resTask = await postAPI.get('./tasks') 
+    
     console.log("resTask", resTask)
     console.log("secret", sortLateTask(resTask.data)[0])
-    recentTask = sortLateTask(resTask.data)[0].id + 1
-    console.log(recentTask)
+    recentTask = sortLateTask(resTask.data)[0].id
+    console.log('recentTask after submet', recentTask)
 
     projectPage(num)
   })
@@ -700,8 +737,12 @@ async function projectPage(num) {
 
 }
 
-// loginPage()
-indexPage()
+if(localStorage.getItem('token')){
+  indexPage()
+} else {
+  loginPage()
+}
+// indexPage()
 // projectPage(2)
 
 
