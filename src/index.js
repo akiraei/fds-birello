@@ -318,28 +318,21 @@ async function indexPage() {
   const contentFrag = document.importNode(templates.content, true)
 
 
-  // ....label.......
+  // ....label for index page header.....
+  // later it will be erased
  
+
  
-  const contentHeaderAnchor = contentFrag.querySelector(".content__header-anchor")
-
-
-  const resLabel = await postAPI.get('./labels')
-
-  resLabel.data.forEach( async label => {
-
-    if (userid === label.userId) {
-
-      const labelFrag = document.importNode(templates.label, true)
-
-      const labelContent = labelFrag.querySelector(".label__content")
-
-      labelContent.textContent = label.title
-
-      contentHeaderAnchor.appendChild(labelContent)
-    }
-    
-  })
+  // const contentHeaderAnchor = contentFrag.querySelector(".content__header-anchor")
+  // const resLabel = await postAPI.get('./labels')
+  // resLabel.data.forEach( async label => {
+  //   if (userid === label.userId) {
+  //     const labelFrag = document.importNode(templates.label, true)
+  //     const labelContent = labelFrag.querySelector(".label__content")
+  //     labelContent.textContent = label.title
+  //     contentHeaderAnchor.appendChild(labelContent)
+  //   } 
+  // })
   
 
 
@@ -460,31 +453,38 @@ async function indexPage() {
 
 
 
+
+
+
     // -- cardbox label --
     ////////////////// please  rest api ////////////////////
 
-    const cardboxLabelAnchor = cardboxFrag.querySelector(".cardbox__label-anchor")
+    // const cardboxLabelAnchor = cardboxFrag.querySelector(".cardbox__label-anchor")
 
-    const Thakky = resTaskIndex.data.filter( e => {return e.projectId === cardboxId})
-    let processedLabelArr =[]
-    Thakky.forEach( el => {
-      processedLabelArr.push(resLabel.data.filter( e => {return e.taskId === el.id})[0])
-    })
+    // const Thakky = resTaskIndex.data.filter( e => {return e.projectId === cardboxId})
+    // let processedLabelArr =[]
+    // Thakky.forEach( el => {
+    //   processedLabelArr.push(resLabel.data.filter( e => {return e.taskId === el.id})[0])
+    // })
     
-        processedLabelArr.forEach(label => {
-      if(label) {
-        const cardboxLabelFrag = document.importNode(templates.cardboxLabel, true)
+    //     processedLabelArr.forEach(label => {
+    //   if(label) {
+    //     const cardboxLabelFrag = document.importNode(templates.cardboxLabel, true)
         
-        cardboxLabelFrag.querySelector('.cardbox__label').textContent = label.title
+    //     cardboxLabelFrag.querySelector('.cardbox__label').textContent = label.title
         
-        render(cardboxLabelAnchor, cardboxLabelFrag)
-      }
-    })
+    //     render(cardboxLabelAnchor, cardboxLabelFrag)
+    //   }
+    // })
+
     ////////////////// please  rest api ////////////////////
 
 
 
 
+
+
+// card box task only 3 
     if (sortOrgDate(resTaskIndex.data).lenght < 3){
 
       sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
@@ -557,7 +557,8 @@ async function projectPage(num) {
 
   //-------------project header and Btn------------
 
-  //---- const and variable --- 
+
+  // new task 
 
   const resProject = await postAPI.get(`./projects/${num}`)
   const projectheaderFrag = document.importNode(templates.projectheader, true)
@@ -586,7 +587,63 @@ async function projectPage(num) {
 
   projectheaderFrag.querySelector(".project__duedate").textContent = "Due date" + moment(resProject.data.dueDate).format('YYYY-MM-DD')
 
-  
+
+  // new label
+
+  const labelPlus = projectheaderFrag.querySelector(".project__header-label-plus")
+  const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")
+  const newLabelForm = projectheaderFrag.querySelector(".newLabel-modal__form")
+  const newLabelClose = projectheaderFrag.querySelector(".newLabel-modal__close-btn")
+
+ labelPlus.addEventListener('click', e => {
+    e.preventDefault()
+    newLabelModal.classList.add("is-active")
+  })
+
+  newLabelClose.addEventListener('click', e => {
+    e.preventDefault()
+    newLabelModal.classList.remove("is-active")
+  })
+
+  newLabelForm.addEventListener("submit", async e => {
+    e.preventDefault()
+    const payload = {
+      userId : userid,
+      projectId : num,
+      title : e.target.elements.title.value,
+      identity : "label"
+    }
+    const res = await postAPI.post('./labels', payload)
+    projectPage(num)
+  })
+
+
+  // ----another div of project header for label -----
+
+  const projectLabelAnchor = projectheaderFrag.querySelector(".project__header-label-anchor")
+
+
+  const resHeaderLabel = await postAPI.get('./labels')
+
+  resHeaderLabel.data.forEach( label => {
+
+    if (userid === label.userId.toString() && num === label.projectId) {
+
+      const labelFrag = document.importNode(templates.label, true)
+      const labelContent = labelFrag.querySelector(".label__content")
+      const labelDelete = labelFrag.querySelector(".label__delete-btn")
+
+      labelContent.textContent = label.title
+      labelDelete.addEventListener("click", async e => {
+        e.preventDefault()
+        const res = await postAPI.delete(`./labels/${label.id}`)
+        projectPage(num)
+      })
+      projectLabelAnchor.appendChild(labelFrag)
+    }
+    
+  })
+
   //----new task modaled---
   
   

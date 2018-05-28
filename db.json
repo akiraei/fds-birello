@@ -426,5 +426,27 @@
       "id": 29
     }
   ],
-  "labels": []
+  "labels": [
+    {
+      "userId": 1,
+      "title": "label 1",
+      "id": 1,
+      "projectId": 5,
+      "identity": "label"
+    },
+    {
+      "userId": "1",
+      "projectId": 5,
+      "title": "라벨 3",
+      "identity": "label",
+      "id": 2
+    },
+    {
+      "userId": "1",
+      "projectId": 5,
+      "title": "라벨 4",
+      "identity": "label",
+      "id": 3
+    }
+  ]
 }
