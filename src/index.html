@@ -52,11 +52,96 @@
 
 <template id="login">
   <h1 class="login__title">birello</h1>
+  <div class="signup__btn hidden">Sign Up</div>
+
   <form class="login__form">
     <input name="id" type="text" class="login__input-id" placeholder="ID">
     <input name="pw" type="text" class="login__input-pw" placeholder="Password">
-    <button class="login__login__submit-btn button">Log in</button>
+    <button class="login__form__submit-btn button">Log in</button>
   </form>
+
+      <div class="login-signup-modal__container modal ">
+
+        <div class="modal-background"></div>
+        <div class="modal-content">
+      
+      <form class="login-signup-modal__form decover">
+        
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Id</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input name='id' class="login-signup-modal__id-input input is-danger" type="text" placeholder="title">
+              </div>
+              <p class="help is-danger">
+                This field is required
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Passwaod</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                    <input name='pw' class="login-signup-modal__pw-input input" placeholder="body">
+                  </div>
+                  <p class="help is-danger">
+                    This field is required
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Passwaod Again</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                        <input name='rePw' class="login-signup-modal__rePw-input input" placeholder="body">
+                      </div>
+                      <p class="help is-danger">
+                        This field is required
+                      </p>
+                    </div>
+                  </div>
+                </div>
+            
+
+            
+            <div class="field is-horizontal">
+              <div class="field-label">
+
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button class="login-signup-modal__submit-btn button is-primary">
+                      Sign Up
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+                    
+            
+          </form>
+
+        </div>
+        <button class="modal-close login-signup-modal__close-btn is-large" aria-label="close"></button>
+
+        </div> 
 </template>
 
 
@@ -429,7 +514,6 @@
 
     <div class="task-project__content-container">
       <p class="task-project__title"></p>
-      <span class="task-project__label"></span>
       <p class="task-project__body"></p>
       <span class="task-project__username"></span>
       <span class="task-project__update"></span>
@@ -528,7 +612,7 @@
           </form>
 
         </div>
-        <button class="modal-close edit-modal__delete is-large" aria-label="close"></button>
+        <button class="modal-close edit-modal__close-btn is-large" aria-label="close"></button>
 
         </div> 
 

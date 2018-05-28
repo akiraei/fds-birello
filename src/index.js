@@ -9,7 +9,7 @@ import axios from 'axios';
 
 
 let recentTask = 1;
-
+let recentUserid;
 
 const postAPI = axios.create({
   baseURL: process.env.API_URL
@@ -129,6 +129,7 @@ function login(res) {
   function logout(){
     delete postAPI.defaults.headers['Authorization']
     localStorage.removeItem('token')
+    recentUserid = ""
     loginPage()
   }
 
@@ -178,20 +179,69 @@ async function loginPage() {
   swipe()
 
   const fragment = document.importNode(templates.login, true)
+
+  const signupBtn = fragment.querySelector('.signup__btn')
+  const signupModal = fragment.querySelector('.login-signup-modal__container')
+  const signupId = fragment.querySelector('.login-signup-modal__id-input')
+  const signupPw = fragment.querySelector('.login-signup-modal__pw-input')
+  const signupRePw = fragment.querySelector('.login-signup-modal__rePw-input')
+  const signupSubmitBtn = fragment.querySelector('.login-signup-modal__submit-btn')
+  const signupCloseBtn = fragment.querySelector('.login-signup-modal__close-btn ')
+  
+  
+  signupBtn.addEventListener('click', e => { 
+    signupModal.classList.add('is-active')
+  })
+
+  signupCloseBtn.addEventListener('click', e => {
+    signupModal.classList.remove('is-active')
+  })
+  
   const form = fragment.querySelector('.login__form')
   form.addEventListener("submit", async e => {
     const payload = {
       username : e.target.elements.id.value,
       password: e.target.elements.pw.value
     }
-
+    
     e.preventDefault()
-
+    
     const res = await postAPI.post('./users/login', payload)
 
-    e.target.elements.pw.value = ""
+    if(res) {
+      const userRes = await postAPI.get('./users')
 
+      recentUserid =  userRes.data.filter( el => {
+        return el.username === payload.username
+      })[0].id
+    }
+    
+    e.target.elements.pw.value = ""
+    
     login(res)
+  })
+  
+  const signupForm = fragment.querySelector('.login-signup-modal__form')
+  signupForm.addEventListener('submit', async e => {
+    e.preventDefault()
+
+    let id = e.target.elements.id.value
+    let pw = e.target.elements.pw.value
+    let rePw = e.target.elements.rePw.value
+
+    if(pw === rePw) {
+      const payload = {
+        username : id,
+        password : pw,
+        identity : "user"
+      }
+
+      const res = await postAPI.post('./users', payload)
+
+      id = ""
+      pw = ""
+      rePw = ""
+    }
   })
 
   render(anchor.login, fragment)
@@ -203,7 +253,7 @@ async function loginPage() {
 
 async function indexPage() {
   
-  const userid = 1
+  const userid = recentUserid
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.remove("hidden")
@@ -248,7 +298,8 @@ async function indexPage() {
             startDate : newCardboxModalBegin.value,
             dueDate : moment(newcardboxModalDue.value),
             orgDate : moment(),
-            update : moment()
+            update : moment(),
+            userId : userid
             ,identity : "project"
           })
           indexPage()
@@ -299,8 +350,9 @@ async function indexPage() {
   const resTaskIndex = await postAPI.get('./tasks')
 
   sortComplete(sortDate(resCardbox.data)).forEach( async cardbox => {
-    
-    
+
+    if(cardbox.userId === userid){ // project userId matching point
+      
     let cardboxId = cardbox.id
     
     const cardboxFrag = document.importNode(templates.cardbox, true)
@@ -475,7 +527,7 @@ async function indexPage() {
 
     completationIndex (cardbox, cardboxFrag)
     contentBodyAnchor.appendChild(cardboxFrag)
-   
+  }
   })
 
   
@@ -493,9 +545,7 @@ async function indexPage() {
 
 async function projectPage(num) {
 
-  console.log("recentTask", recentTask)
-
-  const userid = 1
+  const userid = recentUserid
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.add("hidden")
@@ -524,7 +574,6 @@ async function projectPage(num) {
     newTaskDue.value = moment().format("YYYY-MM-DD")
     e.preventDefault()
     newTaskModal.classList.add("is-active")
-    console.log('recentTask', recentTask)
   })
 
   projectheaderFrag.querySelector(".project__goBack").addEventListener("click", e => {
@@ -556,12 +605,8 @@ async function projectPage(num) {
     })
     
     const resTask = await postAPI.get('./tasks') 
-    
-    console.log("resTask", resTask)
-    console.log("secret", sortLateTask(resTask.data)[0])
-    recentTask = sortLateTask(resTask.data)[0].id
-    console.log('recentTask after submet', recentTask)
 
+    recentTask = sortLateTask(resTask.data)[0].id
     projectPage(num)
   })
   
@@ -578,6 +623,8 @@ async function projectPage(num) {
 
   
   const resTaskProject = await postAPI.get('./tasks?_expand=user')
+  const resLabel = await postAPI.get('./labels')
+  
   
   sortOrgDate(resTaskProject.data).forEach( task => {
     
@@ -596,6 +643,8 @@ async function projectPage(num) {
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
         taskProjectFrag.querySelector(".task-project__username").textContent = task.user.username
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
+
+        
 
 
         //------------- op Btn func --------------
@@ -661,7 +710,7 @@ async function projectPage(num) {
         
         bodyModal.value = task.body
         
-        taskProjectFrag.querySelector(".edit-modal__delete").addEventListener("click", e=> {
+        taskProjectFrag.querySelector(".edit-modal__close-btn").addEventListener("click", e=> {
           e.preventDefault();
           editModal.classList.remove("is-active")
         })
@@ -702,8 +751,6 @@ async function projectPage(num) {
   commentFrag.querySelector(".comment__form").addEventListener("submit", async e=> {
 
     e.preventDefault()
-
-    console.log("get in form ", recentTask)
 
     if(e.target.elements.body.value) {
       const res = await postAPI.post("./comments", {

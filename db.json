@@ -11,7 +11,14 @@
       "id": 1,
       "username": "akira",
       "teamId": 1,
-      "hashedPassword": "$2a$10$EWFQxYQFJe3R19s/.h6PwOZ43i26LnIEEZqbqoNvffZ8KRcB4tqIS",
+      "hashedPassword": "$2a$10$ieTYxTIUstdP3AXy0WjxouwqP.6b7fZQVZiQKpreTVWPqwIT7I5oi",
+      "identity": "user"
+    },
+    {
+      "id": 2,
+      "username": "kira",
+      "teamId": 1,
+      "hashedPassword": "$2a$10$vendwtvq6aH3aDkD1mXtaO2kXhvhFgpuRcxSXV2rUpouEFtkng.uO",
       "identity": "user"
     }
   ],
@@ -25,6 +32,7 @@
       "identity": "project",
       "id": 1,
       "complete": 1
+      ,"userId" : 1
     },
     {
       "title": "두 타이틀",
@@ -35,6 +43,7 @@
       "identity": "project",
       "id": 2,
       "complete": 1
+      ,"userId" : 1
     },
     {
       "title": "샹계탕",
@@ -45,6 +54,7 @@
       "identity": "project",
       "complete": 0,
       "id": 3
+      ,"userId" : 1
     },
     {
       "title": "ㅇㅇㅇ",
@@ -54,6 +64,7 @@
       "update": "2018-05-27T14:15:46.693Z",
       "identity": "project",
       "id": 4
+      ,"userId" : 1
     },
     {
       "title": "집에 갈래에",
@@ -63,6 +74,7 @@
       "update": "2018-05-28T03:22:53.041Z",
       "identity": "project",
       "id": 5
+      ,"userId" : 1
     }
   ],
   "tasks": [
