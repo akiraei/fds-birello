@@ -315,7 +315,7 @@ async function indexPage() {
   
 
   
-  //----------------------content ---------------------------
+  //----------------------index content ------------------
   
   
   const contentFrag = document.importNode(templates.content, true)
@@ -375,7 +375,7 @@ async function indexPage() {
 
       //----///----- I Hate REST API ---///-------///
 
-      projectPage(cardboxId)
+      projectPage(cardboxId, 0)
     })
  
     const cardboxAnchor = cardboxFrag.querySelector(".cardbox__anchor")
@@ -548,7 +548,10 @@ async function indexPage() {
  //------------------- project  page-----------------------
 
 
-async function projectPage(num) {
+async function projectPage(num, labelNum) {
+  // async function projectPage(num, labelNum) {
+
+  // let labelNum = 4;
 
   const userid = localStorage.getItem('recentUserid')
 
@@ -563,7 +566,9 @@ async function projectPage(num) {
 
   // new task modal setting
 
+  const resLabel = await postAPI.get('./labels')
   const resProject = await postAPI.get(`./projects/${num}`)
+
   const projectheaderFrag = document.importNode(templates.projectheader, true)
   const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
 
@@ -596,8 +601,8 @@ async function projectPage(num) {
   // new task modal -- radio template
 
   const newTaskRadioAnchor = projectheaderFrag.querySelector('.newTask-modal__radio-anchor') 
-  const resLabelRadio = await postAPI.get('./labels')
-  resLabelRadio.data.forEach( e => {
+  // const resLabelRadio = await postAPI.get('./labels')
+  resLabel.data.forEach( e => {
     if(e.projectId === num) {
       const labelRadioFrag = document.importNode(templates.radio, true)
       labelRadioFrag.querySelector('.newTask-modal__labelList-radio').value = e.id
@@ -626,7 +631,7 @@ async function projectPage(num) {
   e.preventDefault()
   
   // let labelId;
-  const resLabel = await postAPI.get('./labels')
+  // const resLabel = await postAPI.get('./labels')
   // console.log("reslabel.data", resLabel.data)
   // resLabel.data.forEach( el => {
   //   if( el.title === e.target.elements.radio.value){
@@ -651,7 +656,7 @@ async function projectPage(num) {
     const resTask = await postAPI.get('./tasks') 
     recentTask = sortLateTask(resTask.data)[0].id
 
-    projectPage(num)
+    projectPage(num, labelNum)
   })
   
   newTaskCloseBtn.addEventListener("click", e => {
@@ -688,16 +693,17 @@ async function projectPage(num) {
         identity : "label"
       }
       const res = await postAPI.post('./labels', payload)
-      projectPage(num)
+      projectPage(num, labelNum)
     })
 
 
   const projectLabelAnchor = projectheaderFrag.querySelector(".project__header-label-anchor")
 
 
-  const resHeaderLabel = await postAPI.get('./labels')
-
-  resHeaderLabel.data.forEach( label => {
+  // const resHeaderLabel = await postAPI.get('./labels')
+  
+  resLabel.data.forEach( label => {
+  // resHeaderLabel.data.forEach( label => {
 
     if (userid === label.userId.toString() && num === label.projectId) {
 
@@ -706,10 +712,15 @@ async function projectPage(num) {
       const labelDelete = labelFrag.querySelector(".label__delete-btn")
 
       labelContent.textContent = label.title
+      labelContent.addEventListener("click", async e => {
+        e.preventDefault()
+        console.log("label.id",label.id)
+        projectPage(num, label.id)
+      })
       labelDelete.addEventListener("click", async e => {
         e.preventDefault()
         const res = await postAPI.delete(`./labels/${label.id}`)
-        projectPage(num)
+        projectPage(num, labelNum)
       })
       projectLabelAnchor.appendChild(labelFrag)
     }
@@ -750,12 +761,27 @@ async function projectPage(num) {
     //append project header!!!
   
   
-  //------------------project task --------------------------
+    //------------------project task --------------------------
+    
+    let resTaskProject;
+    
+    if(labelNum === 0){
+      resTaskProject = await postAPI.get('./tasks?_expand=user')
+      console.log(resTaskProject)
+    }else{
+      resTaskProject = {data:[]}
+      
+      const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
+
+    resTaskProjectWhole.data.forEach( el => {
+      if(parseInt(el.label) === labelNum){
+        resTaskProject.data.push(el)
+      }
+    })
+  }
 
 
-  
-  const resTaskProject = await postAPI.get('./tasks?_expand=user')
-  const resLabel = await postAPI.get('./labels')
+  // const resLabel = await postAPI.get('./labels')
   
   
   sortOrgDate(resTaskProject.data).forEach( task => {
@@ -768,7 +794,7 @@ async function projectPage(num) {
 
         e.preventDefault()
         recentTask = task.id 
-        projectPage(num)
+        projectPage(num, labelNum)
       })
         
         taskProjectFrag.querySelector(".task-project__title").textContent = task.title
@@ -777,9 +803,9 @@ async function projectPage(num) {
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
 
         taskProjectFrag.querySelector(".task-project__label").textContent = (resLabel.data.filter( e => {
-          return e.id === parseInt(task.label)
+          return parseInt(e.id) === parseInt(task.label)
         })[0]) ? resLabel.data.filter( e => {
-          return e.id === parseInt(task.label)
+          return parseInt(e.id) === parseInt(task.label)
         })[0].title : ""
 
         
@@ -813,19 +839,19 @@ async function projectPage(num) {
           const res = await postAPI.patch(`./tasks/${task.id}`, {complete:1
             ,update : moment()
           })
-          projectPage(num)                                 
+          projectPage(num, labelNum)                                 
         })      
         
         deleteBtn.addEventListener("click", async e => {
           e.preventDefault();
           const res = await postAPI.delete(`./tasks/${task.id}`)
-          projectPage(num)
+          projectPage(num, labelNum)
         })
 
         containerDelete.addEventListener("click", async e => {
           e.preventDefault();
           const res = await postAPI.delete(`./tasks/${task.id}`)
-          projectPage(num)
+          projectPage(num, labelNum)
         })
 
 
@@ -895,7 +921,7 @@ async function projectPage(num) {
 
           editModal.classList.remove("is-active")
         
-          projectPage(num)
+          projectPage(num, labelNum)
         })
 
 
@@ -944,7 +970,7 @@ async function projectPage(num) {
         orgDate : moment()
         ,identity : "comment"
       })
-      projectPage(num)
+      projectPage(num, labelNum)
     }
   })
   anchor.projectComment.appendChild(commentFrag)
@@ -964,7 +990,7 @@ async function projectPage(num) {
      commentContentFrag.querySelector(".comment-content__delete-btn").addEventListener('click', async e => {
        e.preventDefault()
        const res = await postAPI.delete(`./comments/${comment.id}`)
-       projectPage(num)
+       projectPage(num, labelNum)
      })
 
      anchor.projectComment.appendChild(commentContentFrag)
