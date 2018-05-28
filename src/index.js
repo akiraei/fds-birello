@@ -720,7 +720,7 @@ async function projectPage(num, labelNum) {
       labelDelete.addEventListener("click", async e => {
         e.preventDefault()
         const res = await postAPI.delete(`./labels/${label.id}`)
-        projectPage(num, labelNum)
+        projectPage(num, 0)
       })
       projectLabelAnchor.appendChild(labelFrag)
     }
