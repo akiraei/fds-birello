@@ -17,7 +17,8 @@
   <div class="index">
     <div class="anchor index__anchor-header"></div>
     <div class="anchor index__anchor-content"></div>
-    <div class="anchor index__anchor-footer"></div>
+    <div class="anchor index__anchor-footer">
+    </div>
   </div>
 
   <div class="project">
@@ -26,7 +27,9 @@
       <div class="anchor project__anchor-task"></div>
       <div class="anchor project__anchor-comment"></div>
     </div>
-    <div class="anchor project__anchor-footer"></div>
+    <div class="project__anchor-footer">
+      <span class="project__anchor-footer-birello">birello</span>
+    </div>
   </div>
 
 
@@ -157,9 +160,11 @@
 
 <template id="header">
   <h1 class="header__title">birello</h1>
-  <div class="header__newCardbox-btn button">New project</div>
-  <div class="header__logout-btn button">Log out</div>
-
+  <div class="header__btn-container">
+    <button class="header__newCardbox-btn button">New project</button>
+    <button class="header__logout-btn button">Log out</button>
+  </div>
+    
   <div class="newCardbox-modal modal">
       <div class="modal-background"></div>
       <div class="modal-content">
@@ -245,8 +250,8 @@
 
 
 
-<!-- ========================== content ========================= -->  
-<!-- ========================== content ========================= -->
+<!-- ========================== index content ========================= -->  
+<!-- ========================== index content ========================= -->
 
 
 
@@ -374,7 +379,7 @@
 <template id="task-index">
   <div class="task-index__content">
     <span class="task-index__title"></span>
-    <span class="task-index__undate"></span>
+    <span class="task-index__update"></span>
   </div>
 </template>
 
@@ -392,10 +397,14 @@
 
 <template id="project__header">
   <div class="project__header-norm">
-    <div class="project__title"></div>
-    <div class="project__duedate"></div>
-    <button class="project__newTask button">New Task</button>
-    <button class="project__goBack button">Back to Index</button>
+    <div class="project__header-norm-info">
+      <div class="project__title"></div>
+      <div class="project__duedate"></div>
+    </div>
+    <div class="project__header-norm-btns">
+      <button class="project__newTask button">New Task</button>
+      <button class="project__goBack button">Back to Index</button>
+    </div>
   </div>
   <div class="project__header-label">
     <div class="project__header-label-plus button">+</div>
@@ -562,8 +571,10 @@
 </template>
 
 <template id="label">
+  <div class="label-single__container">
     <span class="label__content"></span>
     <button class="label__delete-btn button">x</button>  
+  </div>
   </template>
   
   
@@ -587,8 +598,12 @@
       <p class="task-project__title"></p>
       <span class="task-project__label"></span> <!-- developing  -->
       <p class="task-project__body"></p>
-      <span class="task-project__username"></span>
-      <span class="task-project__update"></span>
+      <div class="task-project__info">
+        <span class="task-project__username"></span>
+        <span class="task-project__due"></span>
+        <span class="task-project__begin"></span>
+        <span class="task-project__update"></span>
+      </div>
     </div>
 
     <div class="task-project__delete-btn button hidden">delete</div>
@@ -748,9 +763,11 @@
 
         <template id="comment-content">
           <div class="comment-content__container">
-            <p class="comment-content__body"></p>
-            <span class="comment-content__username"></span>
-            <span class="comment-content__originDate"></span>
+            <div class="comment-content__block">
+              <p class="comment-content__body"></p>
+              <span class="comment-content__username"></span>
+              <span class="comment-content__originDate"></span>
+            </div>
             <button class="comment-content__delete-btn">del</button>
           </div>
         </template>

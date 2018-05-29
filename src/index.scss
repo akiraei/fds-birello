@@ -1,68 +1,326 @@
-$main-color: ivory;
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script|Gaegu');
+
+$ultra-violet: #6D5B97;
+$sparkling-grape: #844981;
+$mulberry: #A9729C;
+$jacaranda: #868FC6;
+$rhapsody: #A28AAA;
+$red-violet: #A96483;
+$chateau-rose: #D57897;
+$prism-pink: #F0A5C6;
 
 body {
-  background-color: $main-color;
+  background-color: #5F4B8B;
+  color: white;
+  font-family: 'Gaegu', cursive;
+  margin: 0px;
+  padding: 0px;
+  // height: 100vh;
 }
 
-.hidden {
-  display: none;
-}
-
-.covering {
-  background-color: #101010
-}
-
-.decover {
-  background-color: white
-}
-
-.content__body-anchor {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.cardbox__container {
-  margin: 10px;
-  border-color: black;
+.button {
+  display: inline-block;
+  font-family: 'Gaegu', cursive;
   padding: 5px;
+  margin: 0px;
+  height: 1.5rem;
+  line-height: 0.2rem;
 }
 
-.content__header-anchor {
-  background-color: antiquewhite;
+.login {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &__anchor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__title {
+    font-size: 12rem;
+    font-family: 'Dancing Script', cursive;
+  }
+  &__form{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    * {
+      height: 2rem;
+      margin: 0.3rem;
+    }
+  }
 }
+
+.index{
+  width: 100vw;
+  height: 100vh;
+  &__anchor{
+    &-header{
+      padding-left: 2rem;
+      padding-right: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $sparkling-grape;
+      height: 18vh;
+      // border-bottom-color: $prism-pink;
+      // border-bottom-width: 0.3rem;
+      // border-style: solid;
+    }
+    &-content{
+      background-color: $jacaranda;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      height: 70vh;
+      overflow-y: scroll;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between
+    }
+    &-footer{
+      // border-top-color: $prism-pink;
+      // border-top-width: 0.3rem;
+      // border-style: solid;
+      background-color: $sparkling-grape;
+      height: 12vh;
+    }
+  }
+}
+
+
+.header {
+  &__title {
+    font-size: 3rem;
+    font-family: 'Dancing Script', cursive;
+    margin: 1rem;
+  }
+  &__newCardbox-btn, &__logout-btn {
+    margin: 0.2rem;
+    justify-self: right;
+  }
+}
+
+.cardbox{
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 31vw;
+    height: 50vw;
+    padding: 0.7rem;
+    border-radius: 2rem;
+    border-color: $red-violet;
+    background-color: $chateau-rose;
+    margin: 1rem;
+  }
+  &__title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 0.2rem;
+    overflow: hidden;
+  }
+  &__btn-container{
+    width: 100%;
+    display: flex;
+    margin: 0.2rem;
+    justify-content: flex-end;
+    * {
+      margin: 0.1rem;
+    }
+  }
+  &__update, &__dueDate{
+    align-self: flex-end;
+    justify-self: flex-end;
+  }
+}
+
+
+.content{
+  &__body-anchor{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__header-anchor{
+    background-color: antiquewhite;
+  }
+}
+
+.project{
+  background-color: $red-violet;
+  height: 100vh;
+  &__container{
+    height: 70vh;
+    display: flex;
+  }
+  &__anchor{
+    &-header{
+      height: 22vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &-task{
+      overflow-y: scroll;
+      height: 70vh;
+      width: 60vw;
+      overflow-x: hidden;
+    }
+    &-comment{
+      overflow-y: scroll;
+      width: 40vw;
+      height: 70vh;
+    }
+    &-footer{
+      margin-right: 2rem;
+      font-size: 3rem;
+      font-family: 'Dancing Script', cursive;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  &__header{
+    &-norm{
+      display: flex;
+      justify-content: space-between;
+      padding: 0.2rem;
+      &-btns{
+        display:flex;
+        align-items: center;
+        *{
+          margin: 0.2rem;
+        }
+      }
+    }
+    &-label{
+      display: flex;
+      padding: 0.3rem;
+      justify-content: flex-end;
+      background-color: $chateau-rose;
+      &-plus{
+        justify-self: flex-start;
+      }
+      * {
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+      }
+      &-anchor {
+        display: flex;
+      }
+    }
+  }
+  &__title {
+    font-size : 3rem;
+  }
+}
+
+.label-single__container{
+    background-color: $prism-pink;
+    padding: 0.1rem;
+    border-radius: 0.4rem;
+}
+
+.task {
+  &-index{
+    &__content{
+      background-color: $prism-pink;
+      padding: 0.1rem;
+      border-radius: 1rem;
+      margin: 0.4rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__title{
+      font-size: 1.8rem;
+      padding-left: 0.1rem;
+    }
+    &__update{
+      vertical-align:bottom;
+      font-size: 0.5rem;
+      padding-right: 0.4rem;
+      margin-top: 1.5rem;
+    }
+  }
+  &-project {
+    &__content{
+      display: flex;
+      justify-content: space-between;
+      width: 60vw;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+      background-color:$prism-pink;
+      &-container{
+        width:47vw;
+      }
+    }
+    &__info{
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    &__title{
+      font-size: 2rem;
+    }
+    &__due, &__begin, &__update {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+
+.comment{
+  &__form{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    *{
+      margin: 0.1rem;
+    }
+  }
+  &-content{
+    &__container{
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.3rem;
+      margin-bottom: 0.3rem;
+      background-color:$prism-pink;
+    }
+  }
+  &__input{
+    width: 100%;
+    padding-left: 0.3rem;
+  }
+}
+
 
 .label__content {
   margin: 10px;
 }
 
 
-.project__container {
-  display: flex;
+
+// under!!! must under!!! 
+
+.hidden {
+  display: none;
+  width: 0vw;
+  height: 0vh;
 }
 
-.project__anchor-task{
-  overflow: scroll;
-  background-color: darkkhaki;
+.covering {
+  background-color: $ultra-violet;
+  color: $rhapsody;
+  * {
+    background-color: $ultra-violet;
+  }
 }
 
-.task-project__content {
-  display: flex;
-  width: 300px;
-  margin: 15px;
-  background-color: white;
-}
-
-.project__anchor-comment {
-  overflow: scroll;
-  width: 500px;
-  background-color: gainsboro;
-}
-
-.comment-content__container {
-  margin: 10px;
-  background-color: white;
-}
-
-.cardbox__title {
-  font-size: 3rem;
+.decover {
+  background-color: white
 }

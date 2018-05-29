@@ -508,7 +508,7 @@ async function indexPage() {
       if(taskIndex.projectId === cardboxId && i < 3) {
 
         taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
-        taskIndexFrag.querySelector(".task-index__undate").textContent = "update: " + moment(taskIndex.update).format("YYYY-MM-DD")
+        taskIndexFrag.querySelector(".task-index__update").textContent = "update: " + moment(taskIndex.update).format("YYYY-MM-DD")
 
         cardboxAnchor.appendChild(taskIndexFrag)    
         i++
@@ -858,6 +858,8 @@ async function projectPage(num, labelNum) {
         taskProjectFrag.querySelector(".task-project__title").textContent = task.title
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
         taskProjectFrag.querySelector(".task-project__username").textContent = task.user.username
+        taskProjectFrag.querySelector(".task-project__due").textContent = "Due " + moment(task.dueDate).format("YYYY-MM-DD")
+        taskProjectFrag.querySelector(".task-project__begin").textContent = "Begin " + moment(task.startDate).format("YYYY-MM-DD")
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
 
         taskProjectFrag.querySelector(".task-project__label").textContent = (resLabel.data.filter( e => {
@@ -1034,7 +1036,7 @@ async function projectPage(num, labelNum) {
     const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
       update: moment()
     })
-    
+
   })
   anchor.projectComment.appendChild(commentFrag)
   
