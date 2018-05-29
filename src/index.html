@@ -276,7 +276,9 @@
         <div class="cardbox__btn-delete button">delete</div>
       </div>
 
-    <div class="anchor cardbox__label-anchor"></div>
+      <div class="cardbox__anchor"></div>
+    
+    <!-- <div class="anchor cardbox__label-anchor"></div> -->
     <div class="cardbox__dueDate"></div>
     <div class="cardbox__update"></div> <!-- only this will sort by update -->
 
@@ -349,16 +351,17 @@
                       </div>
                     </div>
                   </form>
-        </div>
-        
+        </div>        
         <button class="cardbox-edit-modal__close-btn modal-close is-large" aria-label="close"></button>
       </div>
+
+
       </div>
   
 
 
-    <div class="cardbox__anchor"></div>
-  </div>
+
+  <!-- </div> -->
 </template>
 
 
@@ -369,7 +372,10 @@
 
 
 <template id="task-index">
-  <p class="task-index__title"></p>
+  <div class="task-index__content">
+    <span class="task-index__title"></span>
+    <span class="task-index__undate"></span>
+  </div>
 </template>
 
 
@@ -394,6 +400,7 @@
   <div class="project__header-label">
     <div class="project__header-label-plus button">+</div>
     <div class="anchor project__header-label-anchor"></div>
+    <div class="project__header-label-whole button">See all</div>
   </div>
   
   

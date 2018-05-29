@@ -84,6 +84,21 @@ function sortLateTask (arr) {
 }
 
 
+function labelFilter(data, labelNum){
+  if(labelNum === 0){
+    return data
+  }else{
+    let arr = {data:[]}
+    data.data.forEach( el => {
+    if(parseInt(el.label) === labelNum){
+      arr.data.push(el)
+    }
+  })
+  return arr
+}
+}
+
+
 function completationProject (task, fragment) {
   if (task.complete === 1) {
 
@@ -482,42 +497,65 @@ async function indexPage() {
 
     ////////////////// please  rest api ////////////////////
 
+    // card box task only 3 
 
 
-
-
-
-// card box task only 3 
-    if (sortOrgDate(resTaskIndex.data).lenght < 3){
-
-      sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
+    let i = 0;
+    sortOrgDate(resTaskIndex.data).forEach( taskIndex => {
       
-        const taskIndexFrag = document.importNode(templates.taskIndex, true)
+      const taskIndexFrag = document.importNode(templates.taskIndex, true)
 
-        if(taskIndex.projectId === cardbox.id) {
-          taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
-          cardboxAnchor.appendChild(taskIndexFrag)
-        }
-      })
+      if(taskIndex.projectId === cardboxId && i < 3) {
 
-    } else {
-      for (let i = 0; i < 3; i++) {
+        taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
+        taskIndexFrag.querySelector(".task-index__undate").textContent = "update: " + moment(taskIndex.update).format("YYYY-MM-DD")
 
-        const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        cardboxAnchor.appendChild(taskIndexFrag)    
+        i++
+      }
+    })
+
+
+
+
+    // if (sortOrgDate(resTaskIndex.data).length < 4){
+      
+    //   sortOrgDate(resTaskIndex.data).forEach( taskIndex => {
         
+    //     const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        
+    //     if(taskIndex.projectId === cardboxId) {
+    //       taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
+    //       cardboxAnchor.appendChild(taskIndexFrag)
+    //     }
+        
+    //   })
+      
+    // } else {
+    //   for (let i = 0; i < 3; i++) {
+        
+    //     const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        
+    //     console.log(sortOrgDate(resTaskIndex.data)[i], cardboxId)
+        
+    //   if(
+    //      (sortOrgDate(resTaskIndex.data)[i].projectId === cardboxId)
+    //     ){
 
 
-      if(
-        (sortOrgDate(resTaskIndex.data).lenght === 0) &&
-         (sortOrgDate(resTaskIndex.data)[i].projectId === cardbox.id)
-        ){
-        taskIndexFrag.querySelector(".task-index__title").textContent = sortOrgDate(resTaskIndex.data)[i].title
-        cardboxAnchor.appendChild(taskIndexFrag)
-      }
 
-      }
-    }
+    //     taskIndexFrag.querySelector(".task-index__title").textContent = sortOrgDate(resTaskIndex.data)[i].title
+    //     cardboxAnchor.appendChild(taskIndexFrag)
+    //   }
+
+    //   }
+    // }
     
+
+
+
+
+
 
 
     // sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
@@ -582,9 +620,9 @@ async function projectPage(num, labelNum) {
   
   
   projectheaderFrag.querySelector(".project__newTask").addEventListener("click", e => {
+    e.preventDefault()
     newTaskBegin.value = moment().format("YYYY-MM-DD")
     newTaskDue.value = moment().format("YYYY-MM-DD")
-    e.preventDefault()
     newTaskModal.classList.add("is-active")
   })
 
@@ -652,8 +690,14 @@ async function projectPage(num, labelNum) {
       ,indentity : "task"
       ,label : e.target.elements.radio.value
     })
+
+    const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
+      update: moment()
+    })
+
+    const resTaskWhole = await postAPI.get('./tasks') 
+    const resTask = labelFilter(resTaskWhole, labelNum)
     
-    const resTask = await postAPI.get('./tasks') 
     recentTask = sortLateTask(resTask.data)[0].id
 
     projectPage(num, labelNum)
@@ -673,10 +717,16 @@ async function projectPage(num, labelNum) {
     const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")
     const newLabelForm = projectheaderFrag.querySelector(".newLabel-modal__form")
     const newLabelClose = projectheaderFrag.querySelector(".newLabel-modal__close-btn")
+    const labelWhole = projectheaderFrag.querySelector(".project__header-label-whole")
   
    labelPlus.addEventListener('click', e => {
       e.preventDefault()
       newLabelModal.classList.add("is-active")
+    })
+
+    labelWhole.addEventListener('click', e=> {
+      e.preventDefault()
+      projectPage(num, 0)
     })
   
     newLabelClose.addEventListener('click', e => {
@@ -694,6 +744,10 @@ async function projectPage(num, labelNum) {
       }
       const res = await postAPI.post('./labels', payload)
       projectPage(num, labelNum)
+
+      const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
+        update: moment()
+      })
     })
 
 
@@ -714,7 +768,6 @@ async function projectPage(num, labelNum) {
       labelContent.textContent = label.title
       labelContent.addEventListener("click", async e => {
         e.preventDefault()
-        console.log("label.id",label.id)
         projectPage(num, label.id)
       })
       labelDelete.addEventListener("click", async e => {
@@ -763,22 +816,27 @@ async function projectPage(num, labelNum) {
   
     //------------------project task --------------------------
     
-    let resTaskProject;
+  //   let resTaskProject;
     
-    if(labelNum === 0){
-      resTaskProject = await postAPI.get('./tasks?_expand=user')
-      console.log(resTaskProject)
-    }else{
-      resTaskProject = {data:[]}
+  //   if(labelNum === 0){
+  //     resTaskProject = await postAPI.get('./tasks?_expand=user')
+  //     console.log(resTaskProject)
+  //   }else{
+  //     resTaskProject = {data:[]}
       
-      const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
+  //     const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
 
-    resTaskProjectWhole.data.forEach( el => {
-      if(parseInt(el.label) === labelNum){
-        resTaskProject.data.push(el)
-      }
-    })
-  }
+  //   resTaskProjectWhole.data.forEach( el => {
+  //     if(parseInt(el.label) === labelNum){
+  //       resTaskProject.data.push(el)
+  //     }
+  //   })
+  // }
+
+
+  const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
+  let resTaskProject = labelFilter(resTaskProjectWhole, labelNum)
+
 
 
   // const resLabel = await postAPI.get('./labels')
@@ -972,6 +1030,11 @@ async function projectPage(num, labelNum) {
       })
       projectPage(num, labelNum)
     }
+
+    const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
+      update: moment()
+    })
+    
   })
   anchor.projectComment.appendChild(commentFrag)
   
