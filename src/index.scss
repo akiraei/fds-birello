@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Dancing+Script|Gaegu');
+@import url('https://fonts.googleapis.com/css?family=Questrial');
 
 $ultra-violet: #6D5B97;
 $sparkling-grape: #844981;
@@ -130,7 +131,7 @@ a{
       justify-content: space-between;
       align-items: center;
       background-color: $sparkling-grape;
-      height: 18vh;
+      height: 16vh;
       // border-bottom-color: $prism-pink;
       // border-bottom-width: 0.3rem;
       // border-style: solid;
@@ -139,23 +140,26 @@ a{
       background-color: $jacaranda;
       padding-top: 0.8rem;
       padding-bottom: 0.8rem;
-      height: 70vh;
+      height: 84vh;
       overflow-y: scroll;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
     }
     &-footer{
+      width: 100vw;
+      position: absolute;
+      bottom: 0px;
       // border-top-color: $prism-pink;
       // border-top-width: 0.3rem;
       // border-style: solid;
       background-color: $sparkling-grape;
-      height: 12vh;
+      height: 6vh;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      font-size: 1.6rem;
-      font-family: 'Dancing Script', cursive;
+      font-size: 1.2rem;
+      font-family: 'Questrial', sans-serif;
       span {
         margin-right: 3rem;
       }
@@ -234,31 +238,42 @@ a{
   &__container{
     height: 70vh;
     display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
   }
   &__anchor{
     &-header{
-      height: 22vh;
+      height: 20vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
     &-task{
       overflow-y: scroll;
-      height: 70vh;
-      width: 60vw;
+      height: 80vh;
+      width: 59%;
       overflow-x: hidden;
+      min-width: 310px;
     }
     &-comment{
       overflow-y: scroll;
-      width: 40vw;
-      height: 70vh;
+      width: 39%;
+      height: 80vh;
+      min-width: 310px;
     }
     &-footer{
-      margin-right: 2rem;
-      font-size: 3rem;
-      font-family: 'Dancing Script', cursive;
+      z-index: 1000;
+      position: absolute;
+      width: 100vw;
+      bottom: 0px;
       display: flex;
       justify-content: flex-end;
+      background-color: $red-violet;
+      span {
+        font-size: 3rem;
+        font-family: 'Dancing Script', cursive;
+        margin-right: 2rem;
+      }
     }
   }
   &__header{
@@ -327,7 +342,8 @@ a{
     &__content{
       display: flex;
       justify-content: space-between;
-      width: 60vw;
+      align-items: center;
+      width: 100%;
       padding-left: 2rem;
       padding-right: 2rem;
       margin-top: 0.4rem;
