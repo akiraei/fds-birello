@@ -102,7 +102,7 @@ function labelFilter(data, labelNum){
 function completationProject (task, fragment) {
   if (task.complete === 1) {
 
-    fragment.querySelector(".task-project__content-container").classList.add('covering')
+    fragment.querySelector(".task-project__content").classList.add('covering')
     
     fragment.querySelector(".task-project__option-btn").classList.add('hidden')
     
@@ -510,6 +510,12 @@ async function indexPage() {
         taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
         taskIndexFrag.querySelector(".task-index__update").textContent = "update: " + moment(taskIndex.update).format("YYYY-MM-DD")
 
+        taskIndexFrag.querySelector(".task-index__content").addEventListener("click", e => {
+          e.preventDefault()
+          recentTask = taskIndex.id
+          projectPage(cardboxId, 0)
+        })
+
         cardboxAnchor.appendChild(taskIndexFrag)    
         i++
       }
@@ -677,6 +683,13 @@ async function projectPage(num, labelNum) {
   //   }
   // })
 
+  let tempLabelId;
+  if(e.target.elements.radio){
+    tempLabelId = e.target.elements.radio.value
+  } else {
+    tempLabelId = 0;
+  }
+
     const res = await postAPI.post('./tasks', {
       projectId : num,
       title : e.target.elements.title.value,
@@ -688,7 +701,7 @@ async function projectPage(num, labelNum) {
       complete : 0,
       userId : userid
       ,indentity : "task"
-      ,label : e.target.elements.radio.value
+      ,label : tempLabelId
     })
 
     const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
@@ -969,13 +982,20 @@ async function projectPage(num, labelNum) {
 
           /// how i can get label id from html in template?
 
+          let tempLabelId;
+          if(e.target.elements.radio){
+            tempLabelId = e.target.elements.radio.value
+          } else {
+            tempLabelId = 0;
+          }
+
           const res = await postAPI.patch(`./tasks/${task.id}`,
           { title: e.target.elements.title.value,
           body : e.target.elements.body.value,
           update : moment(),
           dueDate : e.target.elements.due.value,
           startDate : e.target.elements.begin.value,
-          label : e.target.elements.radio.value
+          label : tempLabelId
           })
 
 

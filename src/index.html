@@ -274,7 +274,7 @@
 
 <template id="cardbox">
   <div class="cardbox__container">
-    <h3 class="cardbox__title"></h3>
+    <a><h3 class="cardbox__title"></h3></a>
 
     <div class="cardbox__btn-container">
         <div class="cardbox__btn-edit button">edit</div>
@@ -378,10 +378,10 @@
 
 
 <template id="task-index">
-  <div class="task-index__content">
+  <a><div class="task-index__content">
     <span class="task-index__title"></span>
     <span class="task-index__update"></span>
-  </div>
+  </div></a>
 </template>
 
 
@@ -594,7 +594,7 @@
 <!-- project task  -->
   <div class="task-project__content">
 
-
+  <a>
     <div class="task-project__content-container">
       <p class="task-project__title"></p>
       <span class="task-project__label"></span> <!-- developing  -->
@@ -606,10 +606,11 @@
         <span class="task-project__update"></span>
       </div>
     </div>
+  </a>
 
     <div class="task-project__delete-btn button hidden">delete</div>
     
-    <div class="task-project__option-btn dropdown is-hoverable"> <!-- use imoticon, hoveralbe(dropdown) -->
+    <div class="task-project__option-btn dropdown is-hoverable is-right"> <!-- use imoticon, hoveralbe(dropdown) -->
       <div class="dropdown-trigger">
         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
           <span> + </span>
@@ -769,7 +770,7 @@
               <span class="comment-content__username"></span>
               <span class="comment-content__originDate"></span>
             </div>
-            <button class="comment-content__delete-btn">del</button>
+            <button class="comment-content__delete-btn button">del</button>
           </div>
         </template>
 
