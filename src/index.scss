@@ -20,10 +20,6 @@ body {
   // height: 100vh;
 }
 
-form {
-  padding: 2rem;
-  border-radius: 2rem;
-}
 
 a{
   color: inherit;
@@ -84,9 +80,15 @@ a{
     * {
       margin : 0.1rem;
       background-color: rgba(255,255,255,0.5);
+    }
   }
 }
+
+.newTask-modal__form, .newCardbox-modal__form, .cardbox-edit-modal__form, .edit-modal__form {
+  padding: 2rem;
+  border-radius: 2rem;
 }
+
 
 // skeleton
 
@@ -152,7 +154,7 @@ a{
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-family: 'Dancing Script', cursive;
       span {
         margin-right: 3rem;

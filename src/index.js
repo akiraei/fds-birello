@@ -223,7 +223,11 @@ async function loginPage() {
     
     e.preventDefault()
     
-    const res = await postAPI.post('./users/login', payload)
+
+    const res = await postAPI.post('./users/login', payload).catch(e =>{
+      alert("invalid ID or PASSWORD")
+    })
+
 
     if(res) {
       const userRes = await postAPI.get('./users')
@@ -313,16 +317,23 @@ async function indexPage() {
         newcardboxSubmitBtn.addEventListener('click', async e=> {
           e.preventDefault()
 
-          const res = await postAPI.post('./projects', {
-            title : newCardboxModalTitle.value,
-            startDate : newCardboxModalBegin.value,
-            dueDate : moment(newcardboxModalDue.value),
-            orgDate : moment(),
-            update : moment(),
-            userId : userid
-            ,identity : "project"
-          })
-          indexPage()
+          if(
+            parseInt(moment(newCardboxModalBegin.value).format('x'))
+             > parseInt(moment(newcardboxModalDue.value).format('x'))
+          ){
+            alert("Please set Dates correctly")
+          } else {
+            const res = await postAPI.post('./projects', {
+              title : newCardboxModalTitle.value,
+              startDate : moment(newCardboxModalBegin.value),
+              dueDate : moment(newcardboxModalDue.value),
+              orgDate : moment(),
+              update : moment(),
+              userId : userid
+              ,identity : "project"
+            })
+            indexPage()
+          }
         })
 
 
@@ -455,13 +466,22 @@ async function indexPage() {
      
     cardboxEditForm.addEventListener("submit", async e => {
       e.preventDefault()
+
+      if(
+        parseInt(moment(e.target.elements.startDate.value).format('x'))
+         > parseInt(moment(e.target.elements.dueDate.value).format('x'))
+      ){
+        alert("Please set Dates correctly")
+      } else {
+
       const res = await postAPI.patch(`./projects/${cardboxId}`, {
         title : e.target.elements.title.value
-        ,startDate : e.target.elements.startDate.value
-        ,dueDate :e.target.elements.dueDate.value
+        ,startDate : moment(e.target.elements.startDate.value)
+        ,dueDate :moment(e.target.elements.dueDate.value)
         ,update : moment()
       })
       indexPage()
+    }
     })
 
     cardboxEditClose.addEventListener("click", e => {
@@ -690,13 +710,20 @@ async function projectPage(num, labelNum) {
     tempLabelId = 0;
   }
 
+  if(
+    parseInt(moment(e.target.elements.begin.value).format('x'))
+     > parseInt(moment(e.target.elements.due.value).format('x'))
+  ){
+    alert("Please set Dates correctly")
+  } else {
+
     const res = await postAPI.post('./tasks', {
       projectId : num,
       title : e.target.elements.title.value,
       body : e.target.elements.body.value,
       orgDate : moment(),
       update : moment(),
-      startDate : e.target.elements.begin.value,
+      startDate : moment(e.target.elements.begin.value),
       dueDate : moment(e.target.elements.due.value,),
       complete : 0,
       userId : userid
@@ -714,6 +741,7 @@ async function projectPage(num, labelNum) {
     recentTask = sortLateTask(resTask.data)[0].id
 
     projectPage(num, labelNum)
+  }
   })
   
   newTaskCloseBtn.addEventListener("click", e => {
@@ -989,12 +1017,19 @@ async function projectPage(num, labelNum) {
             tempLabelId = 0;
           }
 
+          if(
+            parseInt(moment(e.target.elements.begin.value).format('x'))
+             > parseInt(moment(e.target.elements.due.value).format('x'))
+          ){
+            alert("Please set Dates correctly")
+          } else {
+
           const res = await postAPI.patch(`./tasks/${task.id}`,
           { title: e.target.elements.title.value,
           body : e.target.elements.body.value,
           update : moment(),
-          dueDate : e.target.elements.due.value,
-          startDate : e.target.elements.begin.value,
+          dueDate : moment(e.target.elements.due.value),
+          startDate : moment(e.target.elements.begin.value),
           label : tempLabelId
           })
 
@@ -1002,6 +1037,7 @@ async function projectPage(num, labelNum) {
           editModal.classList.remove("is-active")
         
           projectPage(num, labelNum)
+        }
         })
 
 
