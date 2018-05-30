@@ -85,11 +85,6 @@ a{
   }
 }
 
-.newTask-modal__form, .newCardbox-modal__form, .cardbox-edit-modal__form, .edit-modal__form {
-  padding: 2rem;
-  border-radius: 2rem;
-}
-
 
 // skeleton
 
@@ -118,6 +113,14 @@ a{
       margin: 0.3rem;
     }
   }
+}
+
+.signup__btn{
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  // font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
 }
 
 .index{
@@ -419,5 +422,7 @@ a{
 }
 
 .decover {
-  background-color: white
+  background-color: rgba(245,245,245,0.8);
+  padding: 2rem;
+  border-radius: 2rem;
 }

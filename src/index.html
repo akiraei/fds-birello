@@ -56,7 +56,9 @@
 
 <template id="login">
   <h1 class="login__title">birello</h1>
-  <div class="signup__btn hidden">Sign Up</div>
+  <a><div class="signup__btn">Sign Up</div>
+  </a>
+    
 
   <form class="login__form">
     <input name="id" type="text" class="login__input-id" placeholder="ID">
@@ -91,12 +93,12 @@
         
         <div class="field is-horizontal">
           <div class="field-label is-normal">
-            <label class="label">Passwaod</label>
+            <label class="label">Password</label>
           </div>
           <div class="field-body">
             <div class="field">
               <div class="control">
-                    <input name='pw' class="login-signup-modal__pw-input input" placeholder="body">
+                    <input name='pw' class="login-signup-modal__pw-input input"  type="password" placeholder="body">
                   </div>
                   <p class="help is-danger">
                     This field is required
@@ -108,12 +110,12 @@
 
             <div class="field is-horizontal">
               <div class="field-label is-normal">
-                <label class="label">Passwaod Again</label>
+                <label class="label">Password Again</label>
               </div>
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                        <input name='rePw' class="login-signup-modal__rePw-input input" placeholder="body">
+                        <input name='rePw' class="login-signup-modal__rePw-input input"  type="password" placeholder="body">
                       </div>
                       <p class="help is-danger">
                         This field is required

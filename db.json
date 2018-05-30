@@ -20,6 +20,16 @@
       "teamId": 1,
       "hashedPassword": "$2a$10$vendwtvq6aH3aDkD1mXtaO2kXhvhFgpuRcxSXV2rUpouEFtkng.uO",
       "identity": "user"
+    },
+    {
+      "username": "kirara",
+      "hashedPassword": "$2a$10$AjRPWxx0H0gtAEaVzLjsYeda99/HBc1BHK5MnlCmVaq/4Nbqv7bVW",
+      "id": 4
+    },
+    {
+      "username": "kiki",
+      "hashedPassword": "$2a$10$cNrUi.3rgcaVg5zvmHg7BuZR0ujO10YKj9v9Kp.6.dWd9P6MY11cy",
+      "id": 5
     }
   ],
   "projects": [
@@ -77,6 +87,28 @@
       "identity": "project",
       "id": 9,
       "complete": 1
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-30T05:05:25.708Z",
+      "dueDate": "2018-05-30T05:05:25.708Z",
+      "orgDate": "2018-05-30T05:05:25.708Z",
+      "update": "2018-05-30T05:05:25.708Z",
+      "identity": "project",
+      "userId": 4,
+      "complete": 0,
+      "id": 12
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-30T05:10:21.989Z",
+      "dueDate": "2018-05-30T05:10:21.990Z",
+      "orgDate": "2018-05-30T05:10:21.990Z",
+      "update": "2018-05-30T05:10:21.990Z",
+      "identity": "project",
+      "userId": 5,
+      "complete": 0,
+      "id": 13
     }
   ],
   "tasks": [

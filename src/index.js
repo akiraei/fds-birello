@@ -244,26 +244,81 @@ async function loginPage() {
     login(res)
   })
   
+
+
   const signupForm = fragment.querySelector('.login-signup-modal__form')
   signupForm.addEventListener('submit', async e => {
     e.preventDefault()
 
+    
     let id = e.target.elements.id.value
     let pw = e.target.elements.pw.value
     let rePw = e.target.elements.rePw.value
-
-    if(pw === rePw) {
-      const payload = {
-        username : id,
-        password : pw,
-        identity : "user"
+    
+    const resBefore = await postAPI.get('./users')
+    let doubleId = 0;
+    resBefore.data.forEach( e => {
+      if(e.username === id){
+        doubleId++
       }
+    })
+    
+    if(pw === rePw) {
+      if(doubleId > 0) {
+        alert("아이디가 이미 존재합니다.")
+      } else {
+        
+        const payload = {
+          username : id,
+          password : pw,
+          identity : "user"
+        }
+  
+  
+        const res = await postAPI.post('./users/register', payload)
+        const resAfter = await postAPI.get('./users')
+        let userid;
+        resAfter.data.forEach( e => {
+          if(e.username === id) {
+            userid = parseInt(e.id);
+          }
+        })
+  
+  
+  
+        const initCard = {
+          "title": "Welcome birello!",
+          "startDate": moment(),
+          "dueDate": moment(),
+          "orgDate": moment(),
+          "update": moment(),
+          "identity": "project",
+          "userId": userid,
+          "complete": 0
+        }
+  
+        const resInitCard = await postAPI.post('./projects', initCard)
+        
+  
+        id = ""
+        pw = ""
+        rePw = ""
+  
+        if(res) {
+          const userRes = await postAPI.get('./users')
+    
+          let recentUserid =  userRes.data.filter( el => {
+            return el.username === payload.username
+          })[0].id
+    
+          localStorage.setItem('recentUserid', recentUserid)
+        }
+  
+        indexPage()
 
-      const res = await postAPI.post('./users', payload)
-
-      id = ""
-      pw = ""
-      rePw = ""
+      }     
+    } else {
+      alert("please check again password input")
     }
   })
 
