@@ -73,13 +73,15 @@ function labelFilter(data, labelNum){
   if(labelNum === 0){
     return data
   }else{
-    let arr = {data:[]}
+    let obj = {}
+    let arr = []
     data.data.forEach( el => {
     if(parseInt(el.label) === labelNum){
-      arr.data.push(el)
+      arr.push(el)
     }
+    obj.data = arr
   })
-  return arr
+  return obj
 }
 }
 
@@ -486,7 +488,8 @@ async function indexPage() {
 
         taskIndexFrag.querySelector(".task-index__content").addEventListener("click", e => {
           e.preventDefault()
-          projectPage(cardbox.id, taskIndex.id)
+          recentTask = taskIndex.id
+          projectPage(cardbox.id, 0)
         })
 
         cardboxAnchor.appendChild(taskIndexFrag)    

@@ -124,6 +124,7 @@ a{
 }
 
 .index{
+  background-color: rgb(133, 133, 133);
   width: 100vw;
   height: 100vh;
   &__anchor{
@@ -133,21 +134,21 @@ a{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: $sparkling-grape;
-      height: 16vh;
+      background-color: $ultra-violet;
+      height: 7rem;
       // border-bottom-color: $prism-pink;
       // border-bottom-width: 0.3rem;
       // border-style: solid;
     }
     &-content{
-      background-color: $jacaranda;
+      background-color: rgb(133, 133, 133);
       padding-top: 0.8rem;
       padding-bottom: 0.8rem;
-      height: 84vh;
+      height: calc(100vh - 8rem);
       overflow-y: scroll;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: space-around;
     }
     &-footer{
       width: 100vw;
@@ -156,15 +157,17 @@ a{
       // border-top-color: $prism-pink;
       // border-top-width: 0.3rem;
       // border-style: solid;
-      background-color: $sparkling-grape;
-      height: 6vh;
+      background-color: #4d4d4d00;
+      color: #757575;
+      height: 1rem;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      font-size: 1.2rem;
+      font-size: 0.8rem;
       font-family: 'Questrial', sans-serif;
       span {
-        margin-right: 3rem;
+        margin-right: 2rem;
+        margin-bottom: 0.2rem;
       }
     }
   }
@@ -191,7 +194,7 @@ a{
 
 .cardbox{
   &__container {
-    min-width: 340px;
+    min-width: 260px;
     min-height: 420px;
     display: flex;
     flex-direction: column;
@@ -199,8 +202,8 @@ a{
     height: 40vh;
     padding: 0.7rem;
     border-radius: 2rem;
-    border-color: $red-violet;
-    background-color: $chateau-rose;
+    // border-color: $red-violet;
+    background-color: #4d4d4d;
     margin: 1rem;
   }
   &__title {
@@ -236,44 +239,50 @@ a{
 }
 
 .project{
-  background-color: $red-violet;
+  background-color: $ultra-violet;
   height: 100vh;
   &__container{
-    height: 70vh;
-    display: flex;
-    flex-wrap: wrap;
+    background-color: #adadad;
+    height: calc(100vh - 9.3rem);
+    display: grid;
     width: 100vw;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "task comment";
   }
   &__anchor{
     &-header{
-      height: 20vh;
+      // height: 110%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
     &-task{
+      grid-area: task;
       overflow-y: scroll;
-      height: 80vh;
-      width: 59%;
+      height: calc(100vh - 9.3rem);
+      // width: 50%;
       overflow-x: hidden;
-      min-width: 310px;
+      // min-width: 310px;
     }
     &-comment{
+      grid-area: comment;
       overflow-y: scroll;
-      width: 39%;
-      height: 80vh;
-      min-width: 310px;
+      // width: 40%;
+      height: calc(100vh - 9.3rem);
+      // min-width: 310px;
     }
     &-footer{
       z-index: 1000;
+      height: 3rem;
       position: absolute;
       width: 100vw;
       bottom: 0px;
       display: flex;
       justify-content: flex-end;
-      background-color: $red-violet;
+      background-color: #4d4d4d;
       span {
-        font-size: 3rem;
+        font-size: 2.2rem;
         font-family: 'Dancing Script', cursive;
         margin-right: 2rem;
       }
@@ -284,6 +293,7 @@ a{
       display: flex;
       justify-content: space-between;
       padding: 0.2rem;
+      height: 7rem;
       &-btns{
         display:flex;
         align-items: center;
@@ -296,7 +306,7 @@ a{
       display: flex;
       padding: 0.3rem;
       justify-content: flex-end;
-      background-color: $chateau-rose;
+      background-color: $ultra-violet;
       &-plus{
         justify-self: flex-start;
       }
@@ -323,7 +333,7 @@ a{
 .task {
   &-index{
     &__content{
-      background-color: $prism-pink;
+      background-color: #7e7e7e;
       padding: 0.1rem;
       border-radius: 1rem;
       margin: 0.4rem;
@@ -351,7 +361,7 @@ a{
       padding-right: 2rem;
       margin-top: 0.4rem;
       margin-bottom: 0.4rem;
-      background-color:$prism-pink;
+      background-color: #4d4d4d;
       &-container{
         width:47vw;
       }
@@ -386,10 +396,11 @@ a{
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       display: flex;
+      align-items: center;
       justify-content: space-between;
       margin-top: 0.3rem;
       margin-bottom: 0.3rem;
-      background-color:$prism-pink;
+      background-color: #4D4D4D;
     }
   }
   &__input{
