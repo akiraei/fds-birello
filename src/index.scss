@@ -325,7 +325,7 @@ a{
 }
 
 .label-single__container{
-    background-color: $prism-pink;
+    background-color: #4d4d4d;
     padding: 0.1rem;
     border-radius: 0.4rem;
 }
@@ -356,14 +356,14 @@ a{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
-      padding-left: 2rem;
-      padding-right: 2rem;
+      // width: 100%;
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
       margin-top: 0.4rem;
       margin-bottom: 0.4rem;
       background-color: #4d4d4d;
       &-container{
-        width:47vw;
+        // width:47vw;
       }
     }
     &__info{
@@ -373,6 +373,9 @@ a{
     }
     &__title{
       font-size: 2rem;
+    }
+    &__delete-btn, &__option-btn {
+      margin-left: 0.6rem;
     }
     &__due, &__begin, &__update {
       font-size: 0.8rem;
@@ -401,6 +404,9 @@ a{
       margin-top: 0.3rem;
       margin-bottom: 0.3rem;
       background-color: #4D4D4D;
+    }
+    &__delete-btn {
+      margin-left: 0.5rem;
     }
   }
   &__input{
