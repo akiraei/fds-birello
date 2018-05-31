@@ -8,20 +8,6 @@
   ],
   "users": [
     {
-      "id": 1,
-      "username": "akira",
-      "teamId": 1,
-      "hashedPassword": "$2a$10$ieTYxTIUstdP3AXy0WjxouwqP.6b7fZQVZiQKpreTVWPqwIT7I5oi",
-      "identity": "user"
-    },
-    {
-      "id": 2,
-      "username": "kira",
-      "teamId": 1,
-      "hashedPassword": "$2a$10$vendwtvq6aH3aDkD1mXtaO2kXhvhFgpuRcxSXV2rUpouEFtkng.uO",
-      "identity": "user"
-    },
-    {
       "username": "kirara",
       "hashedPassword": "$2a$10$AjRPWxx0H0gtAEaVzLjsYeda99/HBc1BHK5MnlCmVaq/4Nbqv7bVW",
       "id": 4
@@ -30,6 +16,46 @@
       "username": "kiki",
       "hashedPassword": "$2a$10$cNrUi.3rgcaVg5zvmHg7BuZR0ujO10YKj9v9Kp.6.dWd9P6MY11cy",
       "id": 5
+    },
+    {
+      "username": "akira",
+      "hashedPassword": "$2a$10$J1F39GE.gbT4z/pVDCA/B.pEyvRp9EaDqJkvFh9V8vKKTsH8oatd6",
+      "id": 1
+    },
+    {
+      "username": "id",
+      "hashedPassword": "$2a$10$D9fYx3XzBUK/tRwyyEQlMe6RnyzI/NqPZDPhUjIW4BZkpHDgyxNsC",
+      "id": 6
+    },
+    {
+      "username": "akir",
+      "hashedPassword": "$2a$10$UKxn.zY0IZ/8jlpccw5TqeD.ahGkiMhHDYf5nFYDCIW1Aqq/pssjq",
+      "id": 7
+    },
+    {
+      "username": "aai",
+      "hashedPassword": "$2a$10$YNKAYJSSnWOhSK5rR8xT3.C9/lf4xtIqzLizOZaoYA0JG2PX1e9Ze",
+      "id": 8
+    },
+    {
+      "username": "bbi",
+      "hashedPassword": "$2a$10$rS767QjvCKqOZ2AfUspXuuCXJ1yj0BJoic5zPNt61Nib95oHwC/.S",
+      "id": 9
+    },
+    {
+      "username": "cci",
+      "hashedPassword": "$2a$10$yIu7PPh.eUvq6MRhDuBsYuW4hKyjdvMlHkg.ONP6UwMXZP5EvQeyi",
+      "id": 10
+    },
+    {
+      "username": "ddi",
+      "hashedPassword": "$2a$10$DA9TE5gDqV8ur04jD53bEeN377bbKYWQRZrSLodQuz71KbKPkCqNW",
+      "id": 11
+    },
+    {
+      "username": "ffi",
+      "hashedPassword": "$2a$10$D8Gar0qS7DDt/wfwhvPYtui9XWt58EZZFUJYkdn6v/AdWtQpE2A9u",
+      "id": 12
     }
   ],
   "projects": [
@@ -56,37 +82,15 @@
       "complete": 0
     },
     {
-      "title": "kira 2",
-      "startDate": "2018-05-28",
-      "dueDate": "2018-05-27T15:00:00.000Z",
-      "orgDate": "2018-05-28T05:54:32.112Z",
-      "update": "2018-05-28T05:54:35.826Z",
-      "userId": "2",
-      "identity": "project",
-      "id": 7,
-      "complete": 1
-    },
-    {
-      "title": "kira 1",
-      "startDate": "2018-05-28",
+      "title": "kira 12",
+      "startDate": "2018-05-27T15:00:00.000Z",
       "dueDate": "2018-05-27T15:00:00.000Z",
       "orgDate": "2018-05-28T05:54:41.378Z",
-      "update": "2018-05-29T14:54:20.729Z",
+      "update": "2018-05-31T02:46:20.599Z",
       "userId": "2",
       "identity": "project",
       "id": 8,
       "complete": 0
-    },
-    {
-      "title": "aa",
-      "startDate": "2018-05-28T15:00:00.000Z",
-      "dueDate": "2018-05-28T15:00:00.000Z",
-      "orgDate": "2018-05-29T14:37:12.448Z",
-      "update": "2018-05-29T14:54:33.381Z",
-      "userId": "2",
-      "identity": "project",
-      "id": 9,
-      "complete": 1
     },
     {
       "title": "Welcome birello!",
@@ -109,6 +113,71 @@
       "userId": 5,
       "complete": 0,
       "id": 13
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-31T02:47:39.110Z",
+      "dueDate": "2018-05-31T02:47:39.110Z",
+      "orgDate": "2018-05-31T02:47:39.110Z",
+      "update": "2018-05-31T02:47:39.110Z",
+      "identity": "project",
+      "userId": null,
+      "complete": 0,
+      "id": 14
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-31T02:48:42.618Z",
+      "dueDate": "2018-05-31T02:48:42.618Z",
+      "orgDate": "2018-05-31T02:48:42.618Z",
+      "update": "2018-05-31T02:48:42.618Z",
+      "identity": "project",
+      "userId": null,
+      "complete": 0,
+      "id": 15
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-31T02:49:30.405Z",
+      "dueDate": "2018-05-31T02:49:30.405Z",
+      "orgDate": "2018-05-31T02:49:30.405Z",
+      "update": "2018-05-31T02:49:30.405Z",
+      "identity": "project",
+      "userId": null,
+      "complete": 0,
+      "id": 16
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-31T02:52:11.350Z",
+      "dueDate": "2018-05-31T02:52:11.350Z",
+      "orgDate": "2018-05-31T02:52:11.350Z",
+      "update": "2018-05-31T02:52:11.350Z",
+      "identity": "project",
+      "complete": 0,
+      "id": 17
+    },
+    {
+      "title": "Welcome birello!",
+      "startDate": "2018-05-31T02:55:22.004Z",
+      "dueDate": "2018-05-31T02:55:22.004Z",
+      "orgDate": "2018-05-31T02:55:22.004Z",
+      "update": "2018-05-31T02:55:22.004Z",
+      "identity": "project",
+      "userId": 11,
+      "complete": 0,
+      "id": 18
+    },
+    {
+      "title": "Welcome toto!",
+      "startDate": "2018-05-30T15:00:00.000Z",
+      "dueDate": "2018-05-30T15:00:00.000Z",
+      "orgDate": "2018-05-31T02:57:48.530Z",
+      "update": "2018-05-31T03:00:21.384Z",
+      "identity": "project",
+      "userId": 12,
+      "complete": 0,
+      "id": 19
     }
   ],
   "tasks": [
@@ -281,31 +350,59 @@
     },
     {
       "projectId": 8,
-      "title": "aajihbglggyliu",
-      "body": "4746",
-      "orgDate": "2018-05-29T14:38:51.484Z",
-      "update": "2018-05-29T14:54:08.580Z",
-      "startDate": "2018-05-28T15:00:00.000Z",
-      "dueDate": "2019-05-28T15:00:00.000Z",
-      "complete": 0,
-      "userId": "2",
+      "title": "new",
+      "body": "asd",
+      "orgDate": "2018-05-31T02:45:34.732Z",
+      "update": "2018-05-31T02:46:42.902Z",
+      "startDate": "2018-05-30T15:00:00.000Z",
+      "dueDate": "2018-05-30T15:00:00.000Z",
+      "complete": 1,
+      "userId": 2,
       "indentity": "task",
-      "label": 0,
-      "id": 31
+      "label": "10",
+      "id": 33
     },
     {
-      "projectId": 8,
-      "title": "884646",
+      "projectId": 19,
+      "title": "t1",
       "body": "",
-      "orgDate": "2018-05-29T14:54:20.722Z",
-      "update": "2018-05-29T14:54:20.722Z",
-      "startDate": "2018-05-28T15:00:00.000Z",
-      "dueDate": "2018-05-28T15:00:00.000Z",
+      "orgDate": "2018-05-31T02:59:34.122Z",
+      "update": "2018-05-31T02:59:34.122Z",
+      "startDate": "2018-05-30T15:00:00.000Z",
+      "dueDate": "2018-05-30T15:00:00.000Z",
       "complete": 0,
-      "userId": "2",
+      "userId": 12,
       "indentity": "task",
       "label": 0,
-      "id": 32
+      "id": 34
+    },
+    {
+      "projectId": 19,
+      "title": "t2",
+      "body": "",
+      "orgDate": "2018-05-31T02:59:36.995Z",
+      "update": "2018-05-31T02:59:36.995Z",
+      "startDate": "2018-05-30T15:00:00.000Z",
+      "dueDate": "2018-05-30T15:00:00.000Z",
+      "complete": 0,
+      "userId": 12,
+      "indentity": "task",
+      "label": 0,
+      "id": 35
+    },
+    {
+      "projectId": 19,
+      "title": "t3",
+      "body": "",
+      "orgDate": "2018-05-31T02:59:39.593Z",
+      "update": "2018-05-31T02:59:39.593Z",
+      "startDate": "2018-05-30T15:00:00.000Z",
+      "dueDate": "2018-05-30T15:00:00.000Z",
+      "complete": 0,
+      "userId": 12,
+      "indentity": "task",
+      "label": 0,
+      "id": 36
     }
   ],
   "comments": [
@@ -478,44 +575,12 @@
       "id": 48
     },
     {
-      "userId": "2",
-      "taskId": 17,
-      "body": "1",
-      "orgDate": "2018-05-29T14:24:35.705Z",
+      "userId": 2,
+      "taskId": 33,
+      "body": "123",
+      "orgDate": "2018-05-31T02:45:37.715Z",
       "identity": "comment",
       "id": 49
-    },
-    {
-      "userId": "2",
-      "taskId": 17,
-      "body": "2",
-      "orgDate": "2018-05-29T14:24:37.504Z",
-      "identity": "comment",
-      "id": 50
-    },
-    {
-      "userId": "2",
-      "taskId": 17,
-      "body": "3",
-      "orgDate": "2018-05-29T14:24:39.145Z",
-      "identity": "comment",
-      "id": 51
-    },
-    {
-      "userId": "2",
-      "taskId": 17,
-      "body": "4",
-      "orgDate": "2018-05-29T14:24:40.200Z",
-      "identity": "comment",
-      "id": 52
-    },
-    {
-      "userId": "2",
-      "taskId": 31,
-      "body": "huiuihih",
-      "orgDate": "2018-05-29T14:54:11.934Z",
-      "identity": "comment",
-      "id": 53
     }
   ],
   "labels": [
@@ -546,6 +611,13 @@
       "title": "매운 요리",
       "identity": "label",
       "id": 9
+    },
+    {
+      "userId": 2,
+      "projectId": 8,
+      "title": "nl2",
+      "identity": "label",
+      "id": 10
     }
   ]
 }

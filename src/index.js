@@ -8,23 +8,11 @@ import axios from 'axios';
 //--------------------------variable--------------------------
 
 
-let recentTask = 1;
+let recentTask = 0;
 
 const postAPI = axios.create({
   baseURL: process.env.API_URL
 })
-
-
-const anchor = {
-  login : document.querySelector('.login__anchor'),
-  indexHeader : document.querySelector('.index__anchor-header'),
-  indexContent : document.querySelector('.index__anchor-content'),
-  indexFooter : document.querySelector('.index__anchor-footer'),
-  projectHeader : document.querySelector('.project__anchor-header'),
-  projectTask : document.querySelector('.project__anchor-task'),
-  projectComment : document.querySelector('.project__anchor-comment'),
-  projectFooter : document.querySelector('.project__anchor-footer')
-}
 
 
 const templates = {
@@ -57,8 +45,6 @@ function sortDate (arr) {
   return value
 }
 
-
-
 function sortOrgDate (arr) {
   let value =  arr.sort( function (a,b) {
     let k = moment(b.orgDate).format('x') - moment(a.orgDate).format('x')
@@ -83,7 +69,6 @@ function sortLateTask (arr) {
   return value
 }
 
-
 function labelFilter(data, labelNum){
   if(labelNum === 0){
     return data
@@ -98,35 +83,21 @@ function labelFilter(data, labelNum){
 }
 }
 
-
 function completationProject (task, fragment) {
   if (task.complete === 1) {
-
     fragment.querySelector(".task-project__content").classList.add('covering')
-    
     fragment.querySelector(".task-project__option-btn").classList.add('hidden')
-    
     fragment.querySelector(".task-project__delete-btn").classList.remove('hidden')
   }
 }
 
 function completationIndex (task, fragment) {
   if (task.complete === 1) {
-
     fragment.querySelector(".cardbox__container").classList.add('covering')
-    
     fragment.querySelector(".cardbox__btn-edit").classList.add('hidden')
-    
     fragment.querySelector(".cardbox__btn-complete").classList.add('hidden')
   }
 }
-
-
-
-
-
-
-
 
 function login(res) {
   let token;
@@ -134,32 +105,23 @@ function login(res) {
       token = localStorage.getItem('token')
       postAPI.defaults.headers['Authorization'] = `Bearer ${token}`
       indexPage()
-      
+      return ""
     } else if (res){
     localStorage.setItem('token', res.data.token)
     token = localStorage.getItem('token')
     postAPI.defaults.headers['Authorization'] = `Bearer ${token}`
     indexPage()
+    return ""
     }
   }
   
   function logout(){
     delete postAPI.defaults.headers['Authorization']
     localStorage.removeItem('token')
-    localStorage.removeItem('recentUserid')
     loginPage()
   }
 
-
-
-
-
-
-
-
-
 function swipe() {
-  
   let arr = document.querySelectorAll(".anchor")
   arr.forEach( e => {
     e.textContent = ""
@@ -167,13 +129,6 @@ function swipe() {
 }
 
 
-
-function render(anchor, fragment) {
-
-  // anchor.textContent = ""; 
-  
-  anchor.appendChild(fragment);
-}
 
 //----------------template section-----------------------------
 //----------------template section-----------------------------
@@ -197,6 +152,25 @@ async function loginPage() {
 
   const fragment = document.importNode(templates.login, true)
 
+  //login form 
+  const form = fragment.querySelector('.login__form')
+  form.addEventListener("submit", async e => {
+    e.preventDefault()
+    
+    const res = await postAPI.post('./users/login', {
+      username : e.target.elements.id.value,
+      password: e.target.elements.pw.value
+    }).catch(e =>{
+      alert("invalid ID or PASSWORD")
+    })
+    
+    e.target.elements.pw.value = ""
+    login(res)
+  })
+
+
+
+  // sign up modal
   const signupBtn = fragment.querySelector('.signup__btn')
   const signupModal = fragment.querySelector('.login-signup-modal__container')
   const signupId = fragment.querySelector('.login-signup-modal__id-input')
@@ -205,58 +179,23 @@ async function loginPage() {
   const signupSubmitBtn = fragment.querySelector('.login-signup-modal__submit-btn')
   const signupCloseBtn = fragment.querySelector('.login-signup-modal__close-btn ')
   
-  
   signupBtn.addEventListener('click', e => { 
     signupModal.classList.add('is-active')
   })
-
   signupCloseBtn.addEventListener('click', e => {
     signupModal.classList.remove('is-active')
   })
-  
-  const form = fragment.querySelector('.login__form')
-  form.addEventListener("submit", async e => {
-    const payload = {
-      username : e.target.elements.id.value,
-      password: e.target.elements.pw.value
-    }
-    
-    e.preventDefault()
-    
-
-    const res = await postAPI.post('./users/login', payload).catch(e =>{
-      alert("invalid ID or PASSWORD")
-    })
-
-
-    if(res) {
-      const userRes = await postAPI.get('./users')
-
-      let recentUserid =  userRes.data.filter( el => {
-        return el.username === payload.username
-      })[0].id
-
-      localStorage.setItem('recentUserid', recentUserid)
-    }
-    
-    e.target.elements.pw.value = ""
-    
-    login(res)
-  })
-  
-
 
   const signupForm = fragment.querySelector('.login-signup-modal__form')
   signupForm.addEventListener('submit', async e => {
     e.preventDefault()
-
     
     let id = e.target.elements.id.value
     let pw = e.target.elements.pw.value
     let rePw = e.target.elements.rePw.value
     
-    const resBefore = await postAPI.get('./users')
     let doubleId = 0;
+    const resBefore = await postAPI.get('./users')
     resBefore.data.forEach( e => {
       if(e.username === id){
         doubleId++
@@ -266,63 +205,42 @@ async function loginPage() {
     if(pw === rePw) {
       if(doubleId > 0) {
         alert("아이디가 이미 존재합니다.")
+
       } else {
-        
-        const payload = {
+        const res = await postAPI.post('./users/register', {
           username : id,
           password : pw,
           identity : "user"
-        }
-  
-  
-        const res = await postAPI.post('./users/register', payload)
-        const resAfter = await postAPI.get('./users')
-        let userid;
-        resAfter.data.forEach( e => {
-          if(e.username === id) {
-            userid = parseInt(e.id);
-          }
         })
-  
-  
-  
-        const initCard = {
+        const tempUserId = (await postAPI.get('./users')).data.filter( e => {
+          return e.username === id
+        })[0].id
+        const resLogin = await postAPI.post('./users/login', {
+          username : id,
+          password: pw
+        })
+        const resInitCard = await postAPI.post('./projects', {
           "title": "Welcome birello!",
           "startDate": moment(),
           "dueDate": moment(),
           "orgDate": moment(),
           "update": moment(),
           "identity": "project",
-          "userId": userid,
+          "userId": tempUserId,
           "complete": 0
-        }
-  
-        const resInitCard = await postAPI.post('./projects', initCard)
-        
+        })
   
         id = ""
         pw = ""
         rePw = ""
-  
-        if(res) {
-          const userRes = await postAPI.get('./users')
-    
-          let recentUserid =  userRes.data.filter( el => {
-            return el.username === payload.username
-          })[0].id
-    
-          localStorage.setItem('recentUserid', recentUserid)
-        }
-  
-        indexPage()
-
+        login(resLogin)
       }     
     } else {
       alert("please check again password input")
     }
   })
 
-  render(anchor.login, fragment)
+  document.querySelector('.login__anchor').appendChild(fragment)
 }
 
 
@@ -331,8 +249,12 @@ async function loginPage() {
 
 async function indexPage() {
 
-
-  const userid =  localStorage.getItem('recentUserid')
+  const recentUserId = (await postAPI.get('./me')).data.id
+  const recentUserName = (await postAPI.get('./users')).data.filter( e => {return parseInt(e.id) === parseInt(recentUserId)})[0].username
+  const recentUser =  {data: {
+    id: recentUserId,
+    username: recentUserName
+  }}
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.remove("hidden")
@@ -347,138 +269,152 @@ async function indexPage() {
           logout()
         })
 
+        //new card box modal
+
         const newCardboxModal = headerFrag.querySelector(".newCardbox-modal")
-
-        headerFrag.querySelector(".header__newCardbox-btn").addEventListener("click", e => {
-          e.preventDefault()
-          
-          newCardboxModalBegin.value = moment().format("YYYY-MM-DD")
-          newcardboxModalDue.value = moment().format("YYYY-MM-DD")
-
-          newCardboxModal.classList.add("is-active")
-        })
-
-        headerFrag.querySelector(".header__newCardbox-close-btn").addEventListener("click", e => {
-          e.preventDefault()
-          newCardboxModal.classList.remove("is-active")
-        })
-
-
+        const newCardboxModalBtn = headerFrag.querySelector(".header__newCardbox-btn")
+        const newCardboxModalCloseBtn = headerFrag.querySelector(".header__newCardbox-close-btn")
         const newCardboxModalTitle = headerFrag.querySelector(".newCardbox-modal__title-input")
         const newCardboxModalBegin = headerFrag.querySelector(".newCardbox-modal__startDate-input")
         const newcardboxModalDue = headerFrag.querySelector(".newCardbox-modal__dueDate-input")
         const newcardboxSubmitBtn = headerFrag.querySelector(".newCardbox-modal__submit-btn")
-
-        newcardboxSubmitBtn.addEventListener('click', async e=> {
+        const newCardboxModalForm= headerFrag.querySelector(".newCardbox-modal__form")
+        
+        
+        newCardboxModalBtn.addEventListener("click", e => {
+          e.preventDefault()    
+          newCardboxModalBegin.value = moment().format("YYYY-MM-DD")
+          newcardboxModalDue.value = moment().format("YYYY-MM-DD")
+          newCardboxModal.classList.add("is-active")
+        })
+        
+        newCardboxModalCloseBtn.addEventListener("click", e => {
           e.preventDefault()
+          newCardboxModal.classList.remove("is-active")
+        })
+        
+        newCardboxModalForm.addEventListener('submit', async e=> {
+          e.preventDefault() 
 
           if(
-            parseInt(moment(newCardboxModalBegin.value).format('x'))
-             > parseInt(moment(newcardboxModalDue.value).format('x'))
+            parseInt(moment(e.target.elements.begin.value).format('x'))
+             > parseInt(moment(e.target.elements.due.value).format('x'))
           ){
             alert("Please set Dates correctly")
           } else {
             const res = await postAPI.post('./projects', {
-              title : newCardboxModalTitle.value,
-              startDate : moment(newCardboxModalBegin.value),
-              dueDate : moment(newcardboxModalDue.value),
+              title : e.target.elements.title.value,
+              startDate : moment(e.target.elements.begin.value),
+              dueDate : moment(e.target.elements.due.value),
               orgDate : moment(),
               update : moment(),
-              userId : userid
+              userId : recentUser.data.id
               ,identity : "project"
             })
             indexPage()
           }
+          
+
+        })
+        
+        //privacy modal
+        const privacyModalBtn = headerFrag.querySelector(".header__privacy-btn")
+        const privacyModal = headerFrag.querySelector(".privacy-modal")
+        const privacyModalForm = headerFrag.querySelector(".privacy-modal__form")
+        const privacyModalUsername = headerFrag.querySelector(".privacy-modal__username") 
+        const privacyModalDeleteBtn = headerFrag.querySelector(".privacy-modal__delete-account")
+        const privacyModalCloseBtn = headerFrag.querySelector(".pravacy-modal__close-btn")
+
+        privacyModalUsername.textContent = recentUser.data.username
+
+        privacyModalBtn.addEventListener("click", e=> {
+          e.preventDefault()
+          privacyModal.classList.add('is-active')
         })
 
+        privacyModalCloseBtn.addEventListener("click", e=> {
+          e.preventDefault()
+          privacyModalUsername.textContent =""
+          privacyModal.classList.remove('is-active')
+        })
 
-  render(anchor.indexHeader, headerFrag)
-  
+        privacyModalDeleteBtn.addEventListener("click", async e=> {
+          const resPrivacyDelete = await postAPI.delete(`./users/${recentUser.data.id}`)
+          localStorage.remove('token')
+          logout()
+        })
 
+        privacyModalForm.addEventListener("submit", async e=> {
+          e.preventDefault()
+
+          const resPrivacyGet = await postAPI.post('./users/login', {
+            username : privacyModalUsername.textContent,
+            password : e.target.elements.pw.value
+          }).catch( e => {alert("Wrong Password")})
+
+          const samePw = e.target.elements.pw.value === e.target.elements.newPw.value
+          
+          if(resPrivacyGet.data && !samePw){
+            const resPrivacyPatch = postAPI.patch(`./users/${recentUser.data.id}`, {
+              username : privacyModalUsername.textContent,
+              password : e.target.elements.newPw.value
+            })
+            indexPage()
+          } else {
+            alert("Same Password")
+          }
+        })
+
+  document.querySelector('.index__anchor-header').appendChild(headerFrag)
   
   //----------------------index content ------------------
   
   
   const contentFrag = document.importNode(templates.content, true)
 
-
-  // ....label for index page header.....
-  // later it will be erased
- 
-
- 
-  // const contentHeaderAnchor = contentFrag.querySelector(".content__header-anchor")
-  // const resLabel = await postAPI.get('./labels')
-  // resLabel.data.forEach( async label => {
-  //   if (userid === label.userId) {
-  //     const labelFrag = document.importNode(templates.label, true)
-  //     const labelContent = labelFrag.querySelector(".label__content")
-  //     labelContent.textContent = label.title
-  //     contentHeaderAnchor.appendChild(labelContent)
-  //   } 
-  // })
-  
-
-
   //....body.....
 
-  
   const contentBodyAnchor = contentFrag.querySelector(".content__body-anchor")
   
   const resCardbox = await postAPI.get('./projects')
   const resTaskIndex = await postAPI.get('./tasks')
 
   sortComplete(sortDate(resCardbox.data)).forEach( async cardbox => {
-
-    if(cardbox.userId.toString() === userid){ // project userId matching point
-
-    let cardboxId = cardbox.id
     
-    const cardboxFrag = document.importNode(templates.cardbox, true)
+    if(parseInt(cardbox.userId) === parseInt(recentUser.data.id)){
+      
+      const cardboxFrag = document.importNode(templates.cardbox, true)
 
-
-    cardboxFrag.querySelector(".cardbox__title").addEventListener("click", e => {
-
-
-      e.preventDefault()
-
-
-      //----///----- I Hate REST API ------///-----///
-
-      const processedArr = resTaskIndex.data.filter( e => {
-        let k = e.projectId === cardboxId
-        return k
-      })
-
-      if(processedArr.length > 0){
-        recentTask = processedArr[0].id
-      } else { recentTask = 0}
-
-      //----///----- I Hate REST API ---///-------///
-
-      projectPage(cardboxId, 0)
-    })
- 
     const cardboxAnchor = cardboxFrag.querySelector(".cardbox__anchor")
 
     cardboxFrag.querySelector(".cardbox__title").textContent = cardbox.title 
     cardboxFrag.querySelector(".cardbox__update").textContent = "update " + moment(cardbox.update).format('YYYY-MM-DD')
     cardboxFrag.querySelector(".cardbox__dueDate").textContent = "due date " + moment(cardbox.dueDate).format('YYYY-MM-DD')
 
+    cardboxFrag.querySelector(".cardbox__title").addEventListener("click", e => {
+      e.preventDefault()
 
-    // --- cardbox btn ---
+      //----///----- I Hate REST API ------///-----///
+      // const processedArr = resTaskIndex.data.filter( e => {
+      //   let k = e.projectId === cardbox.id
+      //   return k
+      // })
+      // if(processedArr.length > 0){
+      //   recentTask = processedArr[0].id
+      // } else { recentTask = 0}
+      //----///----- I Hate REST API ---///-------///
 
+      projectPage(cardbox.id, 0)
+    })
 
+    // --- cardbox btn and cardbox edit modal---
 
-    const cardboxEditRes = await postAPI.get(`./projects/${cardboxId}`)
+    const cardboxEditRes = await postAPI.get(`./projects/${cardbox.id}`)
 
     const cardboxEditModal = cardboxFrag.querySelector(".cardbox-edit-modal")
-
     const cardboxBtnEdit = cardboxFrag.querySelector(".cardbox__btn-edit")
     const cardboxBtnComplete = cardboxFrag.querySelector(".cardbox__btn-complete")
     const cardboxBtnDelete = cardboxFrag.querySelector(".cardbox__btn-delete")
-
-
     const cardboxEditTitle = cardboxFrag.querySelector(".cardbox-edit-modal__title-input")
     const cardboxEditBegin = cardboxFrag.querySelector(".cardbox-edit-modal__startDate-input")
     const cardboxEditDue = cardboxFrag.querySelector
@@ -494,7 +430,7 @@ async function indexPage() {
 
     cardboxBtnComplete.addEventListener("click", async e => {
       e.preventDefault()
-      const res = await postAPI.patch(`./projects/${cardboxId}`,{
+      const res = await postAPI.patch(`./projects/${cardbox.id}`,{
         complete : 1,
         update : moment()
       })
@@ -503,33 +439,25 @@ async function indexPage() {
 
     cardboxBtnDelete.addEventListener("click", async e => {
       e.preventDefault()
-      const res = await postAPI.delete(`./projects/${cardboxId}`)
+      const res = await postAPI.delete(`./projects/${cardbox.id}`)
       indexPage()
     })
     
-
-
     
-    
-    
-    
-    
-    // --- cardbox edit modal close and submit ---
+    //cardbox edit modal
     
     const cardboxEditForm = cardboxFrag.querySelector(".cardbox-edit-modal__form")
     const cardboxEditClose = cardboxFrag.querySelector(".cardbox-edit-modal__close-btn") 
      
     cardboxEditForm.addEventListener("submit", async e => {
       e.preventDefault()
-
       if(
         parseInt(moment(e.target.elements.startDate.value).format('x'))
          > parseInt(moment(e.target.elements.dueDate.value).format('x'))
       ){
         alert("Please set Dates correctly")
       } else {
-
-      const res = await postAPI.patch(`./projects/${cardboxId}`, {
+      const res = await postAPI.patch(`./projects/${cardbox.id}`, {
         title : e.target.elements.title.value
         ,startDate : moment(e.target.elements.startDate.value)
         ,dueDate :moment(e.target.elements.dueDate.value)
@@ -545,118 +473,32 @@ async function indexPage() {
     })
 
 
-
-
-
-
-    // -- cardbox label --
-    ////////////////// please  rest api ////////////////////
-
-    // const cardboxLabelAnchor = cardboxFrag.querySelector(".cardbox__label-anchor")
-
-    // const Thakky = resTaskIndex.data.filter( e => {return e.projectId === cardboxId})
-    // let processedLabelArr =[]
-    // Thakky.forEach( el => {
-    //   processedLabelArr.push(resLabel.data.filter( e => {return e.taskId === el.id})[0])
-    // })
-    
-    //     processedLabelArr.forEach(label => {
-    //   if(label) {
-    //     const cardboxLabelFrag = document.importNode(templates.cardboxLabel, true)
-        
-    //     cardboxLabelFrag.querySelector('.cardbox__label').textContent = label.title
-        
-    //     render(cardboxLabelAnchor, cardboxLabelFrag)
-    //   }
-    // })
-
-    ////////////////// please  rest api ////////////////////
-
     // card box task only 3 
-
 
     let i = 0;
     sortOrgDate(resTaskIndex.data).forEach( taskIndex => {
-      
-      const taskIndexFrag = document.importNode(templates.taskIndex, true)
+      if(taskIndex.projectId === cardbox.id && i < 3) {
 
-      if(taskIndex.projectId === cardboxId && i < 3) {
-
+        const taskIndexFrag = document.importNode(templates.taskIndex, true)
+        
         taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
         taskIndexFrag.querySelector(".task-index__update").textContent = "update: " + moment(taskIndex.update).format("YYYY-MM-DD")
 
         taskIndexFrag.querySelector(".task-index__content").addEventListener("click", e => {
           e.preventDefault()
-          recentTask = taskIndex.id
-          projectPage(cardboxId, 0)
+          projectPage(cardbox.id, taskIndex.id)
         })
 
         cardboxAnchor.appendChild(taskIndexFrag)    
         i++
       }
     })
-
-
-
-
-    // if (sortOrgDate(resTaskIndex.data).length < 4){
-      
-    //   sortOrgDate(resTaskIndex.data).forEach( taskIndex => {
-        
-    //     const taskIndexFrag = document.importNode(templates.taskIndex, true)
-        
-    //     if(taskIndex.projectId === cardboxId) {
-    //       taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
-    //       cardboxAnchor.appendChild(taskIndexFrag)
-    //     }
-        
-    //   })
-      
-    // } else {
-    //   for (let i = 0; i < 3; i++) {
-        
-    //     const taskIndexFrag = document.importNode(templates.taskIndex, true)
-        
-    //     console.log(sortOrgDate(resTaskIndex.data)[i], cardboxId)
-        
-    //   if(
-    //      (sortOrgDate(resTaskIndex.data)[i].projectId === cardboxId)
-    //     ){
-
-
-
-    //     taskIndexFrag.querySelector(".task-index__title").textContent = sortOrgDate(resTaskIndex.data)[i].title
-    //     cardboxAnchor.appendChild(taskIndexFrag)
-    //   }
-
-    //   }
-    // }
-    
-
-
-
-
-
-
-
-    // sortOrgDate(resTaskIndex.data).forEach( async taskIndex => {
-      
-    //   const taskIndexFrag = document.importNode(templates.taskIndex, true)
-
-    //   if(taskIndex.projectId === cardbox.id) {
-    //     taskIndexFrag.querySelector(".task-index__title").textContent = taskIndex.title
-    //     cardboxAnchor.appendChild(taskIndexFrag)
-    //   }
-    // })
-
-    completationIndex (cardbox, cardboxFrag)
+    completationIndex(cardbox, cardboxFrag)
     contentBodyAnchor.appendChild(cardboxFrag)
   }
   })
 
-  
-  render(anchor.indexContent, contentFrag)
-
+  document.querySelector('.index__anchor-content').appendChild(contentFrag)
 }
 
 
@@ -668,11 +510,8 @@ async function indexPage() {
 
 
 async function projectPage(num, labelNum) {
-  // async function projectPage(num, labelNum) {
 
-  // let labelNum = 4;
-
-  const userid = localStorage.getItem('recentUserid')
+  const recentUser =  await postAPI.get('./me')
 
   document.querySelector(".login").classList.add("hidden")
   document.querySelector(".index").classList.add("hidden")
@@ -690,12 +529,10 @@ async function projectPage(num, labelNum) {
 
   const projectheaderFrag = document.importNode(templates.projectheader, true)
   const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
-
   const newTaskTitle = projectheaderFrag.querySelector('.newTask-modal__title-input')
   const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
   const newTaskDue = projectheaderFrag.querySelector('.newTask-modal__dueDate-input')
   const newTaskbody = projectheaderFrag.querySelector('.newTask-modal__body-input')
-  // const newTaskSubmitBtn = projectheaderFrag.querySelector('.newTask-modal__submit-btn')
   const newTaskForm = projectheaderFrag.querySelector('.newTask-modal__form')
   const newTaskCloseBtn = projectheaderFrag.querySelector('.newTask-modal__close-btn') 
   
@@ -719,44 +556,18 @@ async function projectPage(num, labelNum) {
 
   // new task modal -- radio template
 
-  const newTaskRadioAnchor = projectheaderFrag.querySelector('.newTask-modal__radio-anchor') 
-  // const resLabelRadio = await postAPI.get('./labels')
+  const newTaskRadioAnchor = projectheaderFrag.querySelector('.newTask-modal__radio-anchor')
   resLabel.data.forEach( e => {
     if(e.projectId === num) {
       const labelRadioFrag = document.importNode(templates.radio, true)
       labelRadioFrag.querySelector('.newTask-modal__labelList-radio').value = e.id
       labelRadioFrag.querySelector('.newTask-modal__labelList-title').textContent = e.title
-      render(newTaskRadioAnchor, labelRadioFrag)
+      newTaskRadioAnchor.appendChild(labelRadioFrag)
     }
   })
     
-  // newTaskSubmitBtn.addEventListener("click", async e => {
-  //   e.preventDefault()
-
-  //   const res = await postAPI.post('./tasks', {
-  //     projectId : num,
-  //     title : newTaskTitle.value,
-  //     body : newTaskbody.value,
-  //     orgDate : moment(),
-  //     update : moment(),
-  //     startDate : newTaskBegin,
-  //     dueDate : moment(newTaskDue.value),
-  //     complete : 0,
-  //     userId : userid
-  //     ,indentity : "task"
-  //   })
-
   newTaskForm.addEventListener("submit", async e => {
   e.preventDefault()
-  
-  // let labelId;
-  // const resLabel = await postAPI.get('./labels')
-  // console.log("reslabel.data", resLabel.data)
-  // resLabel.data.forEach( el => {
-  //   if( el.title === e.target.elements.radio.value){
-  //     labelId = parseInt(el.id)
-  //   }
-  // })
 
   let tempLabelId;
   if(e.target.elements.radio){
@@ -781,7 +592,7 @@ async function projectPage(num, labelNum) {
       startDate : moment(e.target.elements.begin.value),
       dueDate : moment(e.target.elements.due.value,),
       complete : 0,
-      userId : userid
+      userId : recentUser.data.id
       ,indentity : "task"
       ,label : tempLabelId
     })
@@ -792,7 +603,6 @@ async function projectPage(num, labelNum) {
 
     const resTaskWhole = await postAPI.get('./tasks') 
     const resTask = labelFilter(resTaskWhole, labelNum)
-    
     recentTask = sortLateTask(resTask.data)[0].id
 
     projectPage(num, labelNum)
@@ -805,10 +615,9 @@ async function projectPage(num, labelNum) {
     })
 
 
-  // ----another div of project header for label -----
+  // project header for label
 
     // new label modal
-
     const labelPlus = projectheaderFrag.querySelector(".project__header-label-plus")
     const newLabelModal = projectheaderFrag.querySelector(".newLabel-modal")
     const newLabelForm = projectheaderFrag.querySelector(".newLabel-modal__form")
@@ -832,30 +641,26 @@ async function projectPage(num, labelNum) {
   
     newLabelForm.addEventListener("submit", async e => {
       e.preventDefault()
-      const payload = {
-        userId : userid,
+
+      const res = await postAPI.post('./labels',{
+        userId : recentUser.data.id,
         projectId : num,
         title : e.target.elements.title.value,
         identity : "label"
-      }
-      const res = await postAPI.post('./labels', payload)
-      projectPage(num, labelNum)
-
+      })
+      
       const resProjectUpdate = await postAPI.patch(`./projects/${num}`, {
         update: moment()
       })
+
+      projectPage(num, labelNum)
     })
 
 
   const projectLabelAnchor = projectheaderFrag.querySelector(".project__header-label-anchor")
-
-
-  // const resHeaderLabel = await postAPI.get('./labels')
-  
+ 
   resLabel.data.forEach( label => {
-  // resHeaderLabel.data.forEach( label => {
-
-    if (userid === label.userId.toString() && num === label.projectId) {
+    if (parseInt(recentUser.data.id) === parseInt(label.userId) && parseInt(num) === parseInt(label.projectId)) {
 
       const labelFrag = document.importNode(templates.label, true)
       const labelContent = labelFrag.querySelector(".label__content")
@@ -876,67 +681,12 @@ async function projectPage(num, labelNum) {
     
   })
 
-  //----new task modaled---
-  
-  
-  // newTaskSubmitBtn.addEventListener("click", async e => {
-  //   e.preventDefault()
-
-  //   const res = await postAPI.post('./tasks', {
-  //     projectId : num,
-  //     title : newTaskTitle.value,
-  //     body : newTaskbody.value,
-  //     orgDate : moment(),
-  //     update : moment(),
-  //     startDate : newTaskBegin,
-  //     dueDate : moment(newTaskDue.value),
-  //     complete : 0,
-  //     userId : userid
-  //     ,indentity : "task"
-  //   })
-    
-  //   const resTask = await postAPI.get('./tasks') 
-
-  //   recentTask = sortLateTask(resTask.data)[0].id
-  //   projectPage(num)
-  // })
-  
-  // newTaskCloseBtn.addEventListener("click", e => {
-  //   e.preventDefault()
-  //   newTaskModal.classList.remove("is-active")
-  //   })
-    
-    anchor.projectHeader.appendChild(projectheaderFrag) 
-    //append project header!!!
-  
+  document.querySelector('.project__anchor-header').appendChild(projectheaderFrag) 
   
     //------------------project task --------------------------
-    
-  //   let resTaskProject;
-    
-  //   if(labelNum === 0){
-  //     resTaskProject = await postAPI.get('./tasks?_expand=user')
-  //     console.log(resTaskProject)
-  //   }else{
-  //     resTaskProject = {data:[]}
-      
-  //     const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
-
-  //   resTaskProjectWhole.data.forEach( el => {
-  //     if(parseInt(el.label) === labelNum){
-  //       resTaskProject.data.push(el)
-  //     }
-  //   })
-  // }
-
 
   const resTaskProjectWhole = await postAPI.get('./tasks?_expand=user')
   let resTaskProject = labelFilter(resTaskProjectWhole, labelNum)
-
-
-
-  // const resLabel = await postAPI.get('./labels')
-  
   
   sortOrgDate(resTaskProject.data).forEach( task => {
     
@@ -945,7 +695,6 @@ async function projectPage(num, labelNum) {
       const taskProjectFrag = document.importNode(templates.taskProject, true)
 
       taskProjectFrag.querySelector(".task-project__content-container").addEventListener("click", e => {
-
         e.preventDefault()
         recentTask = task.id 
         projectPage(num, labelNum)
@@ -957,15 +706,14 @@ async function projectPage(num, labelNum) {
         taskProjectFrag.querySelector(".task-project__due").textContent = "Due " + moment(task.dueDate).format("YYYY-MM-DD")
         taskProjectFrag.querySelector(".task-project__begin").textContent = "Begin " + moment(task.startDate).format("YYYY-MM-DD")
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
-
-        taskProjectFrag.querySelector(".task-project__label").textContent = (resLabel.data.filter( e => {
+        taskProjectFrag.querySelector(".task-project__label").textContent = 
+        resLabel.data.filter( e => {
           return parseInt(e.id) === parseInt(task.label)
-        })[0]) ? resLabel.data.filter( e => {
+        })[0] 
+        ? resLabel.data.filter( e => {
           return parseInt(e.id) === parseInt(task.label)
-        })[0].title : ""
-
-        
-
+        })[0].title 
+        : ""
 
         //------------- op Btn func --------------
         
@@ -975,20 +723,12 @@ async function projectPage(num, labelNum) {
         const editBtn = taskProjectFrag.querySelector(".task-project__option-btn-edit")
         const completeBtn = taskProjectFrag.querySelector(".task-project__option-btn-complete")
         const deleteBtn = taskProjectFrag.querySelector(".task-project__option-btn-delete")
-
-
         const editModal = taskProjectFrag.querySelector(".projectPage-edit-modal__container")
 
-
-        opBtn.addEventListener("click", async e=> {
-          e.preventDefault();
-        })
-        
-        
-        editBtn.addEventListener("click", async e => {
+        editBtn.addEventListener("click", e => {
           e.preventDefault();
           editModal.classList.add("is-active")
-        }) //need async?
+        }) 
         
         completeBtn.addEventListener("click", async e => {
           e.preventDefault();
@@ -1009,13 +749,8 @@ async function projectPage(num, labelNum) {
           const res = await postAPI.delete(`./tasks/${task.id}`)
           projectPage(num, labelNum)
         })
-
-
-
         
-        //-------------edit modaled-------------------
-
-
+        // edit modaled
 
         const updateModal = taskProjectFrag.querySelector(".edit-modal__update")
         const titleModal = taskProjectFrag.querySelector(".edit-modal__title-input")
@@ -1023,7 +758,6 @@ async function projectPage(num, labelNum) {
         const begin = taskProjectFrag.querySelector(".edit-modal__begin-input")
         const due = taskProjectFrag.querySelector(".edit-modal__due-input")
         const taskEditModalForm = taskProjectFrag.querySelector(".edit-modal__form")  
-        
         
         taskProjectFrag.querySelector(".edit-modal__username").textContent = task.user.username
         updateModal.textContent = "update " + moment(task.update).format('YYYY-MM-DD')
@@ -1037,10 +771,9 @@ async function projectPage(num, labelNum) {
           editModal.classList.remove("is-active")
         })
 
+
+        // edit modal label list
         const editRadioAnchor =  taskProjectFrag.querySelector(".edit-modal__radio-anchor")
-
-
-        // edit modal label list  
 
         resLabel.data.forEach( e => {
           if(e.projectId === num) {
@@ -1050,11 +783,11 @@ async function projectPage(num, labelNum) {
             labelTitle.textContent = e.title
             labelRadio.value = e.id
 
-            if(e.id === parseInt(task.label)){
+            if(parseInt(e.id) === parseInt(task.label)){
               labelRadio.setAttribute("checked", "")
             }
-
-            render(editRadioAnchor, labelRadioFrag)
+            
+            editRadioAnchor.appendChild(labelRadioFrag)
           }
         })
 
@@ -1062,8 +795,6 @@ async function projectPage(num, labelNum) {
 
         taskEditModalForm.addEventListener("submit", async e=> {
           e.preventDefault();
-
-          /// how i can get label id from html in template?
 
           let tempLabelId;
           if(e.target.elements.radio){
@@ -1088,40 +819,22 @@ async function projectPage(num, labelNum) {
           label : tempLabelId
           })
 
-
           editModal.classList.remove("is-active")
-        
           projectPage(num, labelNum)
         }
         })
 
-
-
-        // taskProjectFrag.querySelector('.edit-modal__submit-btn').addEventListener("click", async e=> {
-        //   e.preventDefault();
-
-        //   const res = await postAPI.patch(`./tasks/${task.id}`,
-        //   { title: titleModal.value,
-        //   body : bodyModal.value,
-        //   update : moment()       
-        //   })
-
-        //   editModal.classList.remove("is-active")
-        
-        //   projectPage(num)
-        // })
-
-
         completationProject (task, taskProjectFrag)
-        render(anchor.projectTask, taskProjectFrag)
+        document.querySelector('.project__anchor-task').appendChild(taskProjectFrag)
       }
     })
 
   //-----------------project comment-------------------
 
 
-  //---project comment input
+  // project comment input
   const commentFrag = document.importNode(templates.comment, true)
+  const commentForm = commentFrag.querySelector(".comment__form")
 
   if(recentTask === 0){
     commentFrag.querySelector(".comment__submit-btn").classList.add('hidden')
@@ -1129,13 +842,12 @@ async function projectPage(num, labelNum) {
     commentFrag.querySelector(".comment__submit-btn").classList.remove('hidden')
   }
 
-  commentFrag.querySelector(".comment__form").addEventListener("submit", async e=> {
-
+  commentForm.addEventListener("submit", async e=> {
     e.preventDefault()
 
     if(e.target.elements.body.value) {
       const res = await postAPI.post("./comments", {
-        userId : userid,
+        userId : recentUser.data.id,
         taskId : recentTask,
         body : e.target.elements.body.value,
         orgDate : moment()
@@ -1149,11 +861,9 @@ async function projectPage(num, labelNum) {
     })
 
   })
-  anchor.projectComment.appendChild(commentFrag)
+  document.querySelector('.project__anchor-comment').appendChild(commentFrag)
   
-
-  
-  //---project comment content list
+  // project comment content list
   const resCommentContent = await postAPI.get('./comments?_expand=user')
    sortOrgDate(resCommentContent.data).forEach( comment => {
 
@@ -1169,18 +879,16 @@ async function projectPage(num, labelNum) {
        projectPage(num, labelNum)
      })
 
-     anchor.projectComment.appendChild(commentContentFrag)
+     document.querySelector('.project__anchor-comment').appendChild(commentContentFrag)
     }
   })
 
 }
 
 if(localStorage.getItem('token')){
-  indexPage()
+  login()
 } else {
   loginPage()
 }
-// indexPage()
-// projectPage(2)
 
 
