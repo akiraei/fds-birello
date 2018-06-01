@@ -85,11 +85,13 @@ function labelFilter(data, labelNum){
 }
 }
 
-function completationProject (task, fragment) {
+function completationProject (project, task, fragment) {
   if (task.complete === 1) {
     fragment.querySelector(".task-project__content").classList.add('covering')
     fragment.querySelector(".task-project__option-btn").classList.add('hidden')
-    fragment.querySelector(".task-project__delete-btn").classList.remove('hidden')
+    if (project.complete !== 1) {
+      fragment.querySelector(".task-project__delete-btn").classList.remove('hidden')
+    }
   }
 }
 
@@ -100,6 +102,27 @@ function completationIndex (task, fragment) {
     fragment.querySelector(".cardbox__btn-complete").classList.add('hidden')
   }
 }
+
+function completationProjectPage (project, fragment) {
+  if (project.complete === 1) {
+    fragment.querySelector(".project__newTask").classList.add('hidden')
+    fragment.querySelector(".project__header-label-plus").classList.add('hidden')
+  }
+}
+
+function completationTaskProject (project, fragment) {
+  if (project.complete === 1) {
+    fragment.querySelector(".task-project__option-btn").classList.add('hidden')
+  }
+}
+
+function completationProjectHeaderLabel (project, fragment) {
+  if (project.complete === 1) {
+    fragment.querySelector(".label__delete-btn").classList.add('hidden')
+  }
+}
+
+
 
 function login(res) {
   let token;
@@ -157,6 +180,10 @@ async function loginPage() {
   //login form 
   const form = fragment.querySelector('.login__form')
   form.addEventListener("submit", async e => {
+
+    console.log (e.target.elements.id.value, e.target.elements.pw.value)
+
+
     e.preventDefault()
     
     const res = await postAPI.post('./users/login', {
@@ -217,10 +244,17 @@ async function loginPage() {
         const tempUserId = (await postAPI.get('./users')).data.filter( e => {
           return e.username === id
         })[0].id
+        
         const resLogin = await postAPI.post('./users/login', {
           username : id,
           password: pw
         })
+
+        const resReset = await postAPI.post('./users/reset', {
+          username : id,
+          password: pw
+        })
+
         const resInitCard = await postAPI.post('./projects', {
           "title": "Welcome birello!",
           "startDate": moment(),
@@ -331,6 +365,7 @@ async function indexPage() {
 
         privacyModalBtn.addEventListener("click", e=> {
           e.preventDefault()
+          console.log(postAPI.defaults.headers)
           privacyModal.classList.add('is-active')
         })
 
@@ -348,6 +383,8 @@ async function indexPage() {
 
         privacyModalForm.addEventListener("submit", async e=> {
           e.preventDefault()
+
+          console.log(privacyModalUsername.textContent, e.target.elements.pw.value)
 
           const resPrivacyGet = await postAPI.post('./users/login', {
             username : privacyModalUsername.textContent,
@@ -397,13 +434,13 @@ async function indexPage() {
       e.preventDefault()
 
       //----///----- I Hate REST API ------///-----///
-      // const processedArr = resTaskIndex.data.filter( e => {
-      //   let k = e.projectId === cardbox.id
-      //   return k
-      // })
-      // if(processedArr.length > 0){
-      //   recentTask = processedArr[0].id
-      // } else { recentTask = 0}
+      const processedArr = resTaskIndex.data.filter( e => {
+        let k = e.projectId === cardbox.id
+        return k
+      })
+      if(processedArr.length > 0){
+        recentTask = processedArr[0].id
+      } else { recentTask = 0}
       //----///----- I Hate REST API ---///-------///
 
       projectPage(cardbox.id, 0)
@@ -531,6 +568,7 @@ async function projectPage(num, labelNum) {
   const resProject = await postAPI.get(`./projects/${num}`)
 
   const projectheaderFrag = document.importNode(templates.projectheader, true)
+  completationProjectPage(resProject.data, projectheaderFrag)
   const newTaskModal = projectheaderFrag.querySelector(".newTask-modal")
   const newTaskTitle = projectheaderFrag.querySelector('.newTask-modal__title-input')
   const newTaskBegin = projectheaderFrag.querySelector('.newTask-modal__startDate-input')
@@ -666,6 +704,7 @@ async function projectPage(num, labelNum) {
     if (parseInt(recentUser.data.id) === parseInt(label.userId) && parseInt(num) === parseInt(label.projectId)) {
 
       const labelFrag = document.importNode(templates.label, true)
+      completationProjectHeaderLabel (resProject.data, labelFrag)
       const labelContent = labelFrag.querySelector(".label__content")
       const labelDelete = labelFrag.querySelector(".label__delete-btn")
 
@@ -696,12 +735,17 @@ async function projectPage(num, labelNum) {
     if (task.projectId === num) {
 
       const taskProjectFrag = document.importNode(templates.taskProject, true)
+      completationTaskProject(resProject.data, taskProjectFrag)
+
+
 
       taskProjectFrag.querySelector(".task-project__content-container").addEventListener("click", e => {
         e.preventDefault()
         recentTask = task.id 
         projectPage(num, labelNum)
       })
+
+      const taskProjectLabel = taskProjectFrag.querySelector(".task-project__label")
         
         taskProjectFrag.querySelector(".task-project__title").textContent = task.title
         taskProjectFrag.querySelector(".task-project__body").textContent = task.body
@@ -709,7 +753,7 @@ async function projectPage(num, labelNum) {
         taskProjectFrag.querySelector(".task-project__due").textContent = "Due " + moment(task.dueDate).format("YYYY-MM-DD")
         taskProjectFrag.querySelector(".task-project__begin").textContent = "Begin " + moment(task.startDate).format("YYYY-MM-DD")
         taskProjectFrag.querySelector(".task-project__update").textContent = "update " + moment(task.update).format('YYYY-MM-DD')
-        taskProjectFrag.querySelector(".task-project__label").textContent = 
+        taskProjectLabel.textContent = 
         resLabel.data.filter( e => {
           return parseInt(e.id) === parseInt(task.label)
         })[0] 
@@ -778,6 +822,15 @@ async function projectPage(num, labelNum) {
         // edit modal label list
         const editRadioAnchor =  taskProjectFrag.querySelector(".edit-modal__radio-anchor")
 
+        if(true){   //label none 
+          const labelRadioFrag = document.importNode(templates.radio__edit, true)
+          const labelTitle = labelRadioFrag.querySelector('.edit-modal__labelList-title')
+          const labelRadio = labelRadioFrag.querySelector('.edit-modal__labelList-radio')
+          labelTitle.textContent = "none"         
+          editRadioAnchor.appendChild(labelRadioFrag)
+        }
+
+
         resLabel.data.forEach( e => {
           if(e.projectId === num) {
             const labelRadioFrag = document.importNode(templates.radio__edit, true)
@@ -800,11 +853,27 @@ async function projectPage(num, labelNum) {
           e.preventDefault();
 
           let tempLabelId;
-          if(e.target.elements.radio){
+
+          if(e.target.elements.radio.value === "on"){
+            tempLabelId = 0;
+          } else if (e.target.elements.radio){
             tempLabelId = e.target.elements.radio.value
           } else {
             tempLabelId = 0;
           }
+
+          // if(e.target.elements.radio){
+          //   console.log('labeled')
+          //   tempLabelId = e.target.elements.radio.value
+          //   taskProjectLabel.classList.remove("hidden")
+          //   console.log(taskProjectLabel)
+          // } else if (e.target.elements.radio.value = "on"){
+          //   tempLabelId = 0;
+          //   taskProjectLabel.classList.add("hidden")
+          // } else {
+          //   tempLabelId = 0;
+          //   taskProjectLabel.classList.add("hidden")
+          // }
 
           if(
             parseInt(moment(e.target.elements.begin.value).format('x'))
@@ -827,7 +896,7 @@ async function projectPage(num, labelNum) {
         }
         })
 
-        completationProject (task, taskProjectFrag)
+        completationProject (resProject.data, task, taskProjectFrag)
         document.querySelector('.project__anchor-task').appendChild(taskProjectFrag)
       }
     })
@@ -837,6 +906,11 @@ async function projectPage(num, labelNum) {
 
   // project comment input
   const commentFrag = document.importNode(templates.comment, true)
+  if(resProject.data.complete === 1){
+    commentFrag.querySelector(".comment__form").classList.add('hidden')
+  }
+  
+
   const commentForm = commentFrag.querySelector(".comment__form")
 
   if(recentTask === 0){
@@ -872,6 +946,9 @@ async function projectPage(num, labelNum) {
 
     if (comment.taskId === recentTask) {        
      const commentContentFrag = document.importNode(templates.commentContent, true)
+     if(resProject.data.complete === 1){
+      commentContentFrag.querySelector(".comment-content__delete-btn").classList.add('hidden')
+    }
 
      commentContentFrag.querySelector(".comment-content__body").textContent = comment.body
      commentContentFrag.querySelector(".comment-content__username").textContent = comment.user.username
